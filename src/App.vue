@@ -1,18 +1,21 @@
 <template>
-    <div>
-        <div id="nav">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/login">Login </router-link> |
-            <router-link to="/calendar">Calendar </router-link> |
-            <router-link to="/about">About</router-link>
-        </div>
-        <div id="app">
-            <div class="container">
-                <router-view/>
+    <v-app>
+        <div class="content">
+            <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+            <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+            <div id="nav">
+                <router-link to="/">Home</router-link> |
+                <router-link to="/login">Login </router-link> |
+                <router-link to="/calendar">Calendar </router-link> |
+                <router-link to="/about">About</router-link>
+            </div>
+            <div id="app">
+                <div class="container">
+                    <router-view/>
+                </div>
             </div>
         </div>
-    </div>
-    
+    </v-app>
 </template>
 
 <style>
@@ -20,22 +23,29 @@
         padding: 0;
         margin: 0 ;
         height: 100%;
-        background-color:pink;
     }
 
     #app {
         width: 100%;
-        font-family: Avenir, Helvetica, Arial, sans-serif;
+        height: 100%;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
-        color: #2c3e50;
-        background-color:blue;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .content{
+        background-color: rgba(165, 165, 165, 0.301);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .container{
         width: 100%;
-        background-color:red;
         margin:0;
         display: flex;
         flex-direction: column;
@@ -50,6 +60,7 @@
     #nav a {
         font-weight: bold;
         color: #2c3e50;
+        text-decoration: none;
     }
 
     #nav a.router-link-exact-active {
