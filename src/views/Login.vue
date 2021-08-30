@@ -1,30 +1,33 @@
-<template lang="">
-    <div>
-        <div class="main">
-            <div id="login-form">
-                <div id="login-logo">
-
-                </div>
-                <div class="btn-select btn-login">login</div>
-                <div class="btn-select btn-cadastrar">cadastrar</div>
+<template>
+    <div class="main">
+        <div id="login-form">
+            <div id="login-logo">
             </div>
+            <div class="btn-select btn-login">login</div>
+            <div class="btn-select btn-cadastrar">cadastrar</div>
         </div>
     </div>
 </template>
 <script>
     export default {
-        
+        data() {
+            return {
+                
+            }
+        },
     }
 </script>
 
 <style>
     .main{
         width: 100%;
+        height: 100%;
+        padding: 10px;
+        background-color:gray;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 10px;
     }
 
     .btn-select{
@@ -51,9 +54,10 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        box-shadow: 2px 4px 10px 0px rgba(0,0,0,0.75);
-        -webkit-box-shadow: 2px 4px 10px 0px rgba(0,0,0,0.75);
-        -moz-box-shadow: 2px 4px 10px 0px rgba(0,0,0,0.75);
+        box-shadow: 2px 4px 10px 0px rgba(0,0,0,0.45);
+        -webkit-box-shadow: 2px 4px 10px 0px rgba(0,0,0,0.45);
+        -moz-box-shadow: 2px 4px 10px 0px rgba(0,0,0,0.45);
+        background-color:white;
     }
 
     #login-logo{
