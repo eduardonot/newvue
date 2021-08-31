@@ -1,15 +1,13 @@
 <template lang="">
     <div>
-        <h1>Home</h1>
+        
     </div>
 </template>
-
 <script>
-    export default {
-        
-    }
+export default {
+    name: 'Dashboard',
+}
 </script>
-
 <style lang="">
     
 </style>

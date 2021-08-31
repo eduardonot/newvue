@@ -1,8 +1,16 @@
  <template>
-        <div class="calendar-container">
+    <div class="calendar-container">
+        <div class="s2">
+            <h1>Primeira Coluna</h1>
+        </div>
+        <div class="s6 calendar">
             <FullCalendar :options="calendarOptions"/>
             <input type="text" id="dia">
         </div>
+        <div class="s2">
+            <h1>Segunda Coluna</h1>
+        </div>
+    </div>
 </template>
 <script>
 import '@fullcalendar/core/vdom'
@@ -21,6 +29,7 @@ export default {
                 selectable:true,
                 plugins: [ dayGridPlugin, interactionPlugin ],
                 initialView: 'dayGridMonth',
+                height:500,
                 headerToolbar: {
                     left: 'prev',
                     center: 'title',
@@ -74,6 +83,46 @@ export default {
 </script>
 <style>
     .calendar-container{
-        width: 50%;
+        width:100%;
+        height:100%;
+        display:flex;
+        flex-direction:row;
+        justify-content: center;
+    }
+
+    .calendar{
+        display:flex;
+        flex-direction:column;
+    }
+
+    .s1{
+        width:10%;
+    }
+    .s2{
+        width:20%;
+    }
+    .s3{
+        width:30%;
+    }
+    .s4{
+        width:40%;
+    }
+    .s5{
+        width:50%;
+    }
+    .s6{
+        width:60%;
+    }
+    .s7{
+        width:70%;
+    }
+    .s8{
+        width:80%;
+    }
+    .s9{
+        width:90%;
+    }
+    .s10{
+        width:100%;
     }
 </style>
