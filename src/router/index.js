@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from './../views/Login.vue'
-import Calendar from './../views/Calendar.vue'
+import Dashboard from './../views/Dashboard.vue'
 
 Vue.use(VueRouter)
 
@@ -13,9 +13,9 @@ const routes = [
         component: Home
     },
     {
-        path: '/calendar',
-        name: 'Calendar',
-        component: Calendar
+        path: '/dashboard',
+        name: 'Dashboard',
+        component: Dashboard
     },
     {
         path: '/login',

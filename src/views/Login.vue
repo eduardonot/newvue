@@ -8,11 +8,11 @@
                     <form class="form-user" v-if="login">
                         <input class="form-input" type="email" placeholder="EMAIL" ref="login-email"/>
                         <input class="form-input" type="password" placeholder="SENHA" ref="login-senha"/>
-                        <button @click="logar()" class="btn-select btn-login">CONFIRMAR</button>
+                        <button @click="logar()" class="btn-select btn-submit">CONFIRMAR</button>
                         <a @click="() => {login=0, register=1, btnInput=0}">não possui cadastro? clique aqui para se cadastrar.</a>
                     </form>
                     <div v-if="btnInput">
-                        <button @click="()=>{ login=1, register=0, btnInput=0 }" class="btn-select btn-login">LOGIN</button>
+                        <button @click="()=>{ login=1, register=0, btnInput=0 }" class="btn-select btn-submit">LOGIN</button>
                     </div>
                 </div>
                 <div>
@@ -22,7 +22,7 @@
                         <input class="form-input" type="email" placeholder="EMAIL" ref="register-email"/>
                         <input class="form-input" type="password" placeholder="SENHA" ref="register-pass"/>
                         <input class="form-input" type="password" placeholder="CONFIRMAR SENHA" ref="register-repass"/>
-                        <button class="btn-select btn-login">CONFIRMAR</button>
+                        <button class="btn-select btn-submit">CONFIRMAR</button>
                         <a @click="() => {login=1, register=0, btnInput=0}">já é cadastrado? clique aqui para entrar.</a>
                     </form>
                     <div v-if="btnInput">
@@ -46,7 +46,7 @@
         methods: {
             logar () {
                 if (this.$refs['login-email'].value === `teste@teste.com` && this.$refs['login-senha'].value === `123`) {
-                    this.$router.push('/calendar')
+                    this.$router.push('/dashboard')
                 }
                 
             }
@@ -75,6 +75,17 @@
         background-color:white;
     }
 
+    .form-input::placeholder {
+        text-transform:uppercase;
+    }
+    .form-input::-webkit-input-placeholder{
+        text-transform:uppercase;
+    } 
+    
+    .form-input::-moz-placeholder{
+        text-transform:uppercase;
+    }
+
     .main{
         width: 100%;
         height: 100%;
@@ -92,7 +103,7 @@
         color: white;
     }
 
-    .btn-login{
+    .btn-submit{
         background-color: rgba(107,179,246,1);
         text-transform: uppercase;
     }
