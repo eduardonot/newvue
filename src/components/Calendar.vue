@@ -20,7 +20,7 @@ export default {
                 isSelected:false,
                 events:[],
                 locale: ptLocale,
-                selectable:true,
+                selectable:false,
                 plugins: [ dayGridPlugin, interactionPlugin ],
                 initialView: 'dayGridMonth',
                 height:500,
@@ -44,6 +44,7 @@ export default {
     methods: {
         dateClick (arg) {
             this.isSelected = true
+            console.log(arg)
             let getDay = arg.dateStr
             let splitDay = getDay.split('-') 
             let dd = splitDay[2]
@@ -53,7 +54,6 @@ export default {
             return getDay
         },
         unselect: () => {
-            this.isSelected = false
             // document.getElementById('dia').value = ''
         },
         newEvent: function () {
@@ -88,6 +88,54 @@ export default {
         width:100%;
         display:flex;
         flex-direction:column;
+        padding:10px;
     }
+
+    /* EXCLUSIVO FULL CALENDAR*/
+
+    
+
+    .fc-toolbar-title{
+        text-transform: uppercase;
+        font-weight: 400;
+    }
+
+    .fc-prev-button, .fc-button, .fc-button-primary{
+        padding:10px !important;
+    }
+
+    .fc-toolbar-chunk button{
+        background-color: rgba(255, 255, 255, 0) !important;
+        border: none !important;
+        display:flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .fc-daygrid-bg-harness{
+        background-color:rgba(93, 131, 255, 0.164) !important;
+    }
+
+    .fc-toolbar-chunk span {
+        text-align: center;
+        font-size: 25px !important;
+        color:black !important;
+    }
+
+    .fc-addEventButton-button{
+        color:black !important;
+        font-size: 14px !important;
+    }
+
+    .fc-daygrid-day-events{
+        font-size:10px;
+        max-height:40px;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        text-align: center !important;
+    }
+
+    /* FIM FULL CALENDAR */
 
 </style>
