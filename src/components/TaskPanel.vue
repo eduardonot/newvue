@@ -50,7 +50,7 @@ export default {
     name:'TaskPanel',
     data() {
         return {
-            addTarefa:0, editTarefa:0, delTarefa:0, isAbleToConfirm:false, isEditing: false,
+            addTarefa:0, editTarefa:0, delTarefa:0,isMainBtnEnabled:false, isAbleToConfirm:false, isEditing: false,
         }
     },
     methods: {

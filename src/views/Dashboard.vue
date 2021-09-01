@@ -4,10 +4,10 @@
             <Panel/>
         </div>
         <div class="s6">
-            <Calendar/>
+            <Calendar @getdate="getDate"/>
         </div>
         <div class="s2">
-            <TaskPanel/>
+            <TaskPanel />
         </div>
     </div>
 </template>
@@ -17,11 +17,14 @@ import Panel from '../components/UserPanel.vue'
 import TaskPanel from './../components/TaskPanel.vue'
 
 export default {
+    name:'Dashboard',
     data() {
-        
+
     },
     methods: {
-        
+        getDate(data) {
+            console.log(data)
+        }
     },
     components:{
         Calendar, Panel, TaskPanel

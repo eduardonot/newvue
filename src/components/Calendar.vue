@@ -3,6 +3,20 @@
         <div class="calendar">
             <FullCalendar :options="calendarOptions"/>
             <input type="text" id="dia">
+            <div class="task-list">
+                <div class="list-display">
+                    <h5>Horário</h5>
+                </div>
+                <div class="list-display">
+                    <h5>Título</h5>
+                </div>
+                <div class="list-display">
+                    <h5>Status</h5>
+                </div>
+                <div class="list-display">
+                    <h5>Descrição</h5>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -17,10 +31,10 @@ export default {
     data() {
         return {
             calendarOptions: {
-                isSelected:false,
                 events:[],
                 locale: ptLocale,
                 selectable:false,
+                unselectAuto: true,
                 plugins: [ dayGridPlugin, interactionPlugin ],
                 initialView: 'dayGridMonth',
                 height:500,
@@ -37,25 +51,21 @@ export default {
                     }
                 },
                 dateClick: this.dateClick,
-                unselect: this.unselect
-            }
+                
+            },
         }
     },
     methods: {
         dateClick (arg) {
-            this.isSelected = true
-            console.log(arg)
             let getDay = arg.dateStr
             let splitDay = getDay.split('-') 
             let dd = splitDay[2]
             let mm = splitDay[1]
             let yyyy = splitDay[0]
-            document.getElementById('dia').value = `${dd}/${mm}/${yyyy}`
-            return getDay
+            let dia = `${dd}/${mm}/${yyyy}`
+            this.$emit('getdate', dia)
         },
-        unselect: () => {
-            // document.getElementById('dia').value = ''
-        },
+
         newEvent: function () {
             let getDay = document.getElementById('dia').value
             let splitDay = getDay.split('/') 
@@ -89,6 +99,20 @@ export default {
         display:flex;
         flex-direction:column;
         padding:10px;
+    }
+
+    .task-list{
+        width:100%;
+        display:flex;
+        flex-direction:row;
+        justify-content:space-between;
+    }
+
+    .list-display{
+        width:100%;
+        text-align:left;
+        display: flex;
+        flex-direction:column;
     }
 
     /* EXCLUSIVO FULL CALENDAR*/
