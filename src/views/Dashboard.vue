@@ -4,10 +4,10 @@
             <Panel/>
         </div>
         <div class="s6">
-            <Calendar @getdate="getDate"/>
+            <Calendar @getdate="getDate" :newEvent="novaTarefaData"/>
         </div>
         <div class="s2">
-            <TaskPanel />
+            <TaskPanel @novatarefa="addTarefa" :propGetData="dateString" :dateSelected="isDateSelected"/>
         </div>
     </div>
 </template>
@@ -19,11 +19,19 @@ import TaskPanel from './../components/TaskPanel.vue'
 export default {
     name:'Dashboard',
     data() {
-
+        return {
+            dateString:'',
+            isDateSelected:false,
+            novaTarefaData: undefined,
+        }
     },
     methods: {
-        getDate(data) {
-            console.log(data)
+        getDate: function(dados) {
+            this.dateString = dados
+            this.isDateSelected=true
+        },
+        addTarefa: function(dados){
+            this.novaTarefaData = dados
         }
     },
     components:{

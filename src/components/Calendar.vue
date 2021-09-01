@@ -46,12 +46,11 @@ export default {
                 footerToolbar:{center:'addEventButton'},
                 customButtons:{
                     addEventButton:{
-                        text:'+',
+                        text:'',
                         click:this.newEvent
                     }
                 },
                 dateClick: this.dateClick,
-                
             },
         }
     },
@@ -66,15 +65,11 @@ export default {
             this.$emit('getdate', dia)
         },
 
-        newEvent: function () {
-            let getDay = document.getElementById('dia').value
-            let splitDay = getDay.split('/') 
-            var dd = splitDay[0]
-            var mm = splitDay[1]
-            var yyyy = splitDay[2]
+        newEvent: function (data) {
+            console.log(data)
             this.calendarOptions.events.push({
                 title:'teste',
-                start:`${yyyy}-${mm}-${dd}`,
+                start:`2021-09-02`,
                 allDay: false
             })
         }
