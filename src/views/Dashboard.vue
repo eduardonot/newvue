@@ -4,10 +4,10 @@
             <Panel/>
         </div>
         <div class="s6">
-            <Calendar @getdate="getDate" @unselect="unselectDate" :newTask="novaTarefaData"/>
+            <Calendar @editarTarefa="editTarefa" @getdate="getDate" @unselect="unselectDate" :newTask="novaTarefaData"/>
         </div>
         <div class="s2">
-            <TaskPanel @novatarefa="addTarefa" :propGetData="dateString" :dateSelected="isDateSelected"/>
+            <TaskPanel @novatarefa="addTarefa" :propGetData="dateString"  :dateSelected="isDateSelected"/>
         </div>
     </div>
 </template>
@@ -22,16 +22,26 @@ export default {
         return {
             dateString:'',
             isDateSelected:false,
+            ableToAdd: false,
+            ableToEdit:false,
             novaTarefaData: {},
+            editTarefaData: {},
         }
     },
     methods: {
         getDate: function(dados) {
             this.dateString = dados
             this.isDateSelected=true
+            this.ableToEdit = false
+            
         },
-        addTarefa: function(dados){
-            this.novaTarefaData = dados
+        addTarefa: function(tarefa){
+            this.novaTarefaData = tarefa
+        },
+        editTarefa: function(){
+            // this.isDateSelected=true
+            // this.ableToEdit = false
+            // this.editTarefaData = tarefa
         },
         unselectDate: function(){
             this.isDateSelected=false
