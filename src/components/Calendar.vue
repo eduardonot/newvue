@@ -2,21 +2,23 @@
     <div class="calendar-container">
         <div class="calendar">
             <FullCalendar :options="calendarOptions"/>
-            <input type="text" id="dia">
-            <div class="task-list">
-                <div class="list-display">
-                    <h5>Horário</h5>
-                </div>
-                <div class="list-display">
-                    <h5>Título</h5>
-                </div>
-                <div class="list-display">
-                    <h5>Status</h5>
-                </div>
-                <div class="list-display">
-                    <h5>Descrição</h5>
+            <div v-if="hasEventRegistered"> <!-- TODO EXIBIR CADASTRADOS APÓS CLIQUE -->
+                <div class="task-list">
+                    <div class="list-display">
+                        <h5>Horário</h5>
+                    </div>
+                    <div class="list-display">
+                        <h5>Título</h5>
+                    </div>
+                    <div class="list-display">
+                        <h5>Status</h5>
+                    </div>
+                    <div class="list-display">
+                        <h5>Descrição</h5>
+                    </div>
                 </div>
             </div>
+            
         </div>
     </div>
 </template>
@@ -45,17 +47,19 @@ export default {
                 },
                 footerToolbar:{center:'addEventButton'},
                 customButtons:{
-                    addEventButton:{
-                        text:'',
-                        click:this.newEvent
-                    }
+                    // addEventButton:{
+                    //     text:'Clique',
+                    //     click:this.newEvent
+                    // }
                 },
                 dateClick: this.dateClick,
+                
             },
         }
     },
     methods: {
         dateClick (arg) {
+            // TODO ENVIAR DADOS PARA A DIV hasEventRegistered
             let getDay = arg.dateStr
             let splitDay = getDay.split('-') 
             let dd = splitDay[2]
@@ -65,18 +69,32 @@ export default {
             this.$emit('getdate', dia)
         },
 
-        newEvent: function (data) {
-            console.log(data)
-            this.calendarOptions.events.push({
-                title:'teste',
-                start:`2021-09-02`,
-                allDay: false
-            })
-        }
     },
     components:{
         FullCalendar
     },
+    props: {
+        newTask:{
+            type: Object,
+            required: true,
+            default: () => {}
+        }
+    },
+    watch:{
+        newTask: {
+            handler: function (data) {
+                if (data !== {} ){
+                    let getDay = data.data
+                    let splitDay = getDay.split('/')
+                    this.calendarOptions.events.push({
+                        title: data.titulo,
+                        start:`${splitDay[2]}-${splitDay[1]}-${splitDay[0]}`,
+                        allDay: true
+                    })
+                }
+            }
+        }
+    }
 }
 
 </script>
@@ -87,6 +105,7 @@ export default {
         display:flex;
         flex-direction:row;
         justify-content: center;
+        overflow:hidden;
     }
 
     .calendar{
@@ -94,6 +113,7 @@ export default {
         display:flex;
         flex-direction:column;
         padding:10px;
+        overflow:hidden;
     }
 
     .task-list{
@@ -153,6 +173,18 @@ export default {
         overflow-x: hidden !important;
         overflow-y: auto !important;
         text-align: center !important;
+    }
+    .fc-day:active{
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .fc-day:hover{
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .fc-sticky{
+        font-size:9px;
+        font-weight:normal;
     }
 
     /* FIM FULL CALENDAR */

@@ -1,6 +1,8 @@
 <template lang="">
     <div class="panel-container">
-        <div class="panel-logo"></div>
+        <div class="panel-logo">
+            <img src="./../../public/icons/stanley-icon.png"/>
+        </div>
         <div class="panel-buttons">
             <button @click="() => {showSearch()}"><span class="material-icons-outlined">search</span></button>
             <button @click="() => {showSettings()}"><span class="material-icons-outlined">settings</span></button>
@@ -115,14 +117,19 @@ export default {
 
     .painel{
         width:100%;
+        height:100%;
     }
 
     .panel-logo{
-        background-color: rgba(245,88,88,1);
         min-width: 150px;
         min-height: 150px;
         margin-bottom: 30px;
         margin-top: 10px;
+    }
+
+    .panel-logo img{
+        max-width: 150px;
+        margin:0;
     }
 
     .panel-buttons{

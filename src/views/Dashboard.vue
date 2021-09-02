@@ -4,7 +4,7 @@
             <Panel/>
         </div>
         <div class="s6">
-            <Calendar @getdate="getDate" :newEvent="novaTarefaData"/>
+            <Calendar @getdate="getDate" :newTask="novaTarefaData"/>
         </div>
         <div class="s2">
             <TaskPanel @novatarefa="addTarefa" :propGetData="dateString" :dateSelected="isDateSelected"/>
@@ -22,7 +22,7 @@ export default {
         return {
             dateString:'',
             isDateSelected:false,
-            novaTarefaData: undefined,
+            novaTarefaData: {},
         }
     },
     methods: {
@@ -31,6 +31,7 @@ export default {
             this.isDateSelected=true
         },
         addTarefa: function(dados){
+            console.log(dados)
             this.novaTarefaData = dados
         }
     },
