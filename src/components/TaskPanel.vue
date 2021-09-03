@@ -3,7 +3,7 @@
         <!-- DIV ADICIONAR NOVO -->
         <div class="task-panel" v-if="addTarefa">
             <h5 class="painel-caption">Data</h5>
-            <input v-model="propGetData" class="form-input" type="text" disabled ref="add-data"/>
+            <input v-model="inputDateStringField" class="form-input" type="text" disabled ref="add-data"/>
             <h5 class="painel-caption">Título</h5>
             <input class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="add-titulo"/>
             <h5 class="painel-caption">Hora</h5>
@@ -24,28 +24,16 @@
         
         <div class="task-panel">
         <!-- BOTOES -->
-            <div v-if="dateSelected">
-                <div class="task-panel">
-
-                    <!-- ADICIONAR -->
-                    <div v-if="!isAbleToAdd">
-                        <button @click="() => { addTask() }" class="btn-verde">adicionar novo</button>
-                    </div>
-                    <div v-if="isAbleToConfirmAdd">
-                        <button @click="() => { confirmAdd() }" class="btn-azul">confirmar</button>
-                        <button @click="() => { cancel() }" class="btn-rosa">cancelar</button>
-                    </div>
-
-                    <!-- TODO EDITAR -->
-                    <!-- <div v-if="isAbleToEdit">
-                        <button @click="() => { editTask() }" class="btn-azul">editar selecionado</button>
-                        <button @click="() => { delTask() }" class="btn-rosa">excluir</button>
-                    </div> -->
-                    <div v-if="isEditing">
-                        <button @click="() => { concluir() }" class="btn-verde">Marcar como concluída</button>
-                    </div>
-                    
-                </div>
+            <div>
+            <!-- TODO ADICIONAR -->
+                <button v-if="showAddTaskBtn" @click="() => { addTask() }" class="btn-verde">adicionar novo</button>
+                <button v-if="showConfirmAddTaskBtn" @click="() => { confirmAdd() }" class="btn-azul">confirmar</button>
+                <button v-if="showCancelBtn" @click="() => { cancel() }" class="btn-rosa">cancelar</button>
+            <!-- TODO EDITAR -->
+                <button v-if="showEditTaskBtn" @click="() => { editTask() }" class="btn-azul">editar selecionado</button>
+                <button v-if="showDelTaskBtn" @click="() => { delTask() }" class="btn-rosa">excluir</button>
+                <button v-if="showConfirmEditBtn" @click="() => { confirmEdit() }" class="btn-azul">confirmar edição</button>
+                <button v-if="showFishingTaskBtn" @click="() => { markAsFinished() }" class="btn-verde">Marcar como concluída</button>
             </div>
         </div>
         
@@ -56,28 +44,21 @@ export default {
     name:'TaskPanel',
     data() {
         return {
-            addTarefa:0,
-            editTarefa:0, 
-            delTarefa:0,
-            isAbleToAdd:false, 
-            isAbleToConfirmAdd:false, 
-            isEditing: false,
             
         }
     },
     methods: {
         addTask(){
-            this.addTarefa = 1, this.editTarefa = 0, this.delTarefa = 0, this.isAbleToAdd = true, this.isAbleToConfirmAdd = true, this.isEditing = false
+            // TODO ADD
         },
         editTask(){
-            this.addTarefa = 0, this.editTarefa = 1, this.delTarefa = 0, this.isAbleToAdd = true, this.isAbleToConfirmAdd = true, this.isEditing = true
+            // TODO EDIT
         },
         delTask(){
-            console.log('deleted')
+            // TODO DELETE
         },
         cancel(){
-            
-            this.addTarefa = 0, this.editTarefa = 0, this.delTarefa = 0, this.isAbleToAdd = false, this.isAbleToConfirmAdd = false, this.isEditing = false
+            // TODO CANCEL
         },
         confirmAdd(){
             let data = this.$refs['add-data'].value
@@ -86,28 +67,29 @@ export default {
             let descricao = this.$refs['add-descricao'].value
             if (data !== '' && titulo !== '' && hora !== ''){
                 this.$emit('novatarefa', {data, titulo, hora, descricao})
-                this.addTarefa = 0, this.editTarefa = 0, this.delTarefa = 0, this.isAbleToAdd = false, this.isAbleToConfirmAdd = false, this.isEditing = false
+                this.addTarefa = false, this.editTarefa = false, this.delTarefa = false, this.addOptions = false, this.editOptions = false
                 return
             }
             console.log('nao preenchido')
             },
         concluir(){
-            console.log('done!')
+            // TODO CONCLUIR
         }
     },
     props:{
-        propGetData:{
+        inputDateStringField:{
             type: String,
             default: ''
         },
-        dateSelected:{
+        isAbleToAdd:{
             type: Boolean,
             default: false
         },
         isAbleToEdit:{
             type: Boolean,
-            default: true
-        }
+            default: false
+        },
+        
     }
 }
 </script>

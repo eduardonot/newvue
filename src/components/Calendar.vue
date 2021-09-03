@@ -93,7 +93,7 @@ export default {
             let mm = splitDay[1]
             let yyyy = splitDay[0]
             let dia = `${dd}/${mm}/${yyyy}`
-            this.$emit('getdate', dia)
+            this.$emit('clickedDate', dia)
             if (checkExists.length === 0) {
                 this.hasEventRegistered = false
                 return

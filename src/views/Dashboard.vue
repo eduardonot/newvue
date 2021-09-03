@@ -4,10 +4,10 @@
             <Panel/>
         </div>
         <div class="s6">
-            <Calendar @editarTarefa="editTarefa" @getdate="getDate" @unselect="unselectDate" :newTask="novaTarefaData"/>
+            <Calendar @editarTarefa="editTarefa" @clickedDate="calendarClickedDate" @unselect="unselectDate" :newTask="novaTarefaData"/>
         </div>
         <div class="s2">
-            <TaskPanel @novatarefa="addTarefa" :propGetData="dateString"  :dateSelected="isDateSelected"/>
+            <TaskPanel @novatarefa="addTarefa" :inputDateStringField='dateToString' />
         </div>
     </div>
 </template>
@@ -20,28 +20,28 @@ export default {
     name:'Dashboard',
     data() {
         return {
-            dateString:'',
+            dateToString:'',
             isDateSelected:false,
-            ableToAdd: false,
-            ableToEdit:false,
+            enableAddOptions: false,
+            isAbleToEdit:false,
             novaTarefaData: {},
             editTarefaData: {},
         }
     },
     methods: {
-        getDate: function(dados) {
-            this.dateString = dados
-            this.isDateSelected=true
+        calendarClickedDate: function(date) {
+            this.dateToString = date
+            this.enableAddOptions = true
             this.ableToEdit = false
-            
+            // this.isAbleToEdit = false
         },
         addTarefa: function(tarefa){
             this.novaTarefaData = tarefa
         },
         editTarefa: function(){
+            this.enableAddOptions = false
             // this.isDateSelected=true
-            // this.ableToEdit = false
-            // this.editTarefaData = tarefa
+            // this.isAbleToEdit = true
         },
         unselectDate: function(){
             this.isDateSelected=false
