@@ -1,7 +1,7 @@
 <template>
     <div class="task-panel-container">
         <!-- DIV ADICIONAR NOVO -->
-        <div class="task-panel" v-if="addTarefa">
+        <div class="task-panel" v-if="addTarefaPanel">
             <h5 class="painel-caption">Data</h5>
             <input v-model="inputDateStringField" class="form-input" type="text" disabled ref="add-data"/>
             <h5 class="painel-caption">Título</h5>
@@ -10,16 +10,22 @@
             <input class="form-input" type="time" placeholder="HORA" ref="add-hora"/>
             <h5 class="painel-caption">Descrição</h5>
             <input class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="add-descricao"/>
+            <button @click="() => { confirmAdd() }" class="btn-azul">confirmar</button>
+            <button @click="() => { cancel() }" class="btn-rosa">cancelar</button>
+           
         </div>
 
         <!-- DIV EDITAR SELECIONADO -->
-        <div class="task-panel" v-if="editTarefa">
+        <div class="task-panel" v-if="editTarefaPanel">
             <h5 class="painel-caption">Título</h5>
-            <input class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="edit-titulo"/>
+            <input v-model="inputTaskField.title" class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="edit-titulo"/>
             <h5 class="painel-caption">Hora</h5>
-            <input class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
+            <input v-model="inputTaskField.hora" class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
             <h5 class="painel-caption">Descrição</h5>
-            <input class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
+            <input v-model="inputTaskField.descricao" class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
+            <button @click="() => { confirmEdit() }" class="btn-azul">confirmar edição</button>
+            <button @click="() => { markAsFinished() }" class="btn-verde">Marcar como concluída</button>
+            <button v-if="showDelTaskBtn" @click="() => { delTask() }" class="btn-rosa">excluir</button>
         </div>
         
         <div class="task-panel">
@@ -27,13 +33,8 @@
             <div>
             <!-- TODO ADICIONAR -->
                 <button v-if="showAddTaskBtn" @click="() => { addTask() }" class="btn-verde">adicionar novo</button>
-                <button v-if="showConfirmAddTaskBtn" @click="() => { confirmAdd() }" class="btn-azul">confirmar</button>
-                <button v-if="showCancelBtn" @click="() => { cancel() }" class="btn-rosa">cancelar</button>
             <!-- TODO EDITAR -->
                 <button v-if="showEditTaskBtn" @click="() => { editTask() }" class="btn-azul">editar selecionado</button>
-                <button v-if="showDelTaskBtn" @click="() => { delTask() }" class="btn-rosa">excluir</button>
-                <button v-if="showConfirmEditBtn" @click="() => { confirmEdit() }" class="btn-azul">confirmar edição</button>
-                <button v-if="showFishingTaskBtn" @click="() => { markAsFinished() }" class="btn-verde">Marcar como concluída</button>
             </div>
         </div>
         
@@ -44,15 +45,23 @@ export default {
     name:'TaskPanel',
     data() {
         return {
-            
         }
     },
     methods: {
         addTask(){
-            // TODO ADD
+            this.addTarefaPanel = true
+            this.editTarefaPanel = false
+            this.showAddTaskBtn = false
+            this.showEditTaskBtn = false
+            this.showDelTaskBtn = false
         },
         editTask(){
             // TODO EDIT
+            this.editTarefaPanel = true
+            this.addTarefaPanel = false
+            this.showAddTaskBtn = false
+            this.showEditTaskBtn = false
+            this.showDelTaskBtn = true
         },
         delTask(){
             // TODO DELETE
@@ -67,7 +76,7 @@ export default {
             let descricao = this.$refs['add-descricao'].value
             if (data !== '' && titulo !== '' && hora !== ''){
                 this.$emit('novatarefa', {data, titulo, hora, descricao})
-                this.addTarefa = false, this.editTarefa = false, this.delTarefa = false, this.addOptions = false, this.editOptions = false
+                this.addTarefaPanel = false, this.editTarefaPanel = false, this.delTarefa = false, this.addOptions = false, this.editOptions = false
                 return
             }
             console.log('nao preenchido')
@@ -81,15 +90,45 @@ export default {
             type: String,
             default: ''
         },
-        isAbleToAdd:{
+        inputTaskField:{
+            type: Object
+        },
+        addTarefaPanel:{
             type: Boolean,
             default: false
         },
-        isAbleToEdit:{
+        editTarefaPanel:{
             type: Boolean,
             default: false
         },
-        
+        showAddTaskBtn:{
+            type: Boolean,
+            default: false
+        },
+        showEditTaskBtn:{
+            type: Boolean,
+            default: false
+        },
+        showConfirmAddTaskBtn:{
+            type: Boolean,
+            default: false
+        },
+        showCancelBtn:{
+            type: Boolean,
+            default: false
+        },
+        showDelTaskBtn:{
+            type: Boolean,
+            default: false
+        },
+        showConfirmEditBtn:{
+            type: Boolean,
+            default: false
+        },
+        showFinishTaskBtn:{
+            type: Boolean,
+            default: false  
+        }
     }
 }
 </script>

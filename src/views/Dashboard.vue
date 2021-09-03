@@ -4,10 +4,27 @@
             <Panel/>
         </div>
         <div class="s6">
-            <Calendar @editarTarefa="editTarefa" @clickedDate="calendarClickedDate" @unselect="unselectDate" :newTask="novaTarefaData"/>
+            <Calendar 
+            @editarTarefa="editTarefa" 
+            @clickedDate="calendarClickedDate" 
+            @unselect="unselectDate" 
+            :newTask="novaTarefaData"/>
         </div>
         <div class="s2">
-            <TaskPanel @novatarefa="addTarefa" :inputDateStringField='dateToString' />
+            <TaskPanel 
+            @novatarefa = "addTarefa" 
+            :addTarefaPanel = "addPanel"
+            :editTarefaPanel = "editPanel"
+            :showAddTaskBtn = "addTaskBtn" 
+            :showEditTaskBtn = "editTaskBtn" 
+            :showConfirmAddTaskBtn = "confirmAddTaskBtn"
+            :showCancelBtn = "cancelBtn"
+            :showDelTaskBtn = "delTaskBtn"
+            :showConfirmEditBtn = "showConfirmEditBtn"
+            :showFinishTaskBtn = "showConfirmEditBtn"
+            :inputDateStringField = 'dateToString' 
+            :inputTaskField = "sendTaskFieldToEdit"
+            />
         </div>
     </div>
 </template>
@@ -21,30 +38,48 @@ export default {
     data() {
         return {
             dateToString:'',
-            isDateSelected:false,
-            enableAddOptions: false,
-            isAbleToEdit:false,
+            addPanel: false,
+            editPanel: false,
+            addTaskBtn: false,
+            editTaskBtn: false,
+            confirmAddTaskBtn: false,
+            cancelBtn: false,
+            delTaskBtn: false,
+            showFinishTaskBtn: false,
+            showConfirmEditBtn: false,
             novaTarefaData: {},
-            editTarefaData: {},
+            sendTaskFieldToEdit: {}
         }
     },
     methods: {
         calendarClickedDate: function(date) {
             this.dateToString = date
-            this.enableAddOptions = true
-            this.ableToEdit = false
-            // this.isAbleToEdit = false
+            this.addPanel = false
+            this.editPanel = false
+            this.addTaskBtn = true
+            this.editTaskBtn = false
+            this.confirmAddTaskBtn = false
+            this.cancelBtn = false
+            this.delTaskBtn = false
+            this.showFinishTaskBtn = false
+            this.showConfirmEditBtn = false
         },
         addTarefa: function(tarefa){
             this.novaTarefaData = tarefa
         },
-        editTarefa: function(){
-            this.enableAddOptions = false
-            // this.isDateSelected=true
-            // this.isAbleToEdit = true
+        editTarefa: function(tarefa){
+            this.sendTaskFieldToEdit = tarefa
+            this.addPanel = false
+            this.editPanel = false
+            this.addTaskBtn = false
+            this.editTaskBtn = true
+            this.confirmAddTaskBtn = false
+            this.cancelBtn = false
+            this.delTaskBtn = false
+            this.showFinishTaskBtn = false
+            this.showConfirmEditBtn = false
         },
         unselectDate: function(){
-            this.isDateSelected=false
         }
     },
     components:{

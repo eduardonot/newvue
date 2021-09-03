@@ -8,7 +8,7 @@
                     <div class="list-display">
                         <h5>Horário</h5>
                         <ul>
-                        <li @click="() => {editarTarefaSelecionada(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
+                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
                             {{ tarefas.hora }}
                         </li>
                         </ul>
@@ -16,7 +16,7 @@
                     <div class="list-display">
                         <h5>Título</h5>
                         <ul>
-                        <li @click="() => {editarTarefaSelecionada(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
+                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
                             {{ tarefas.title}}
                         </li>
                         </ul>
@@ -24,7 +24,7 @@
                     <div class="list-display">
                         <h5>Status</h5>
                         <ul>
-                        <li @click="() => {editarTarefaSelecionada(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
+                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
                             {{ tarefas.status}}
                         </li>
                         </ul>
@@ -32,7 +32,7 @@
                     <div class="list-display">
                         <h5>Descrição</h5>
                         <ul>
-                        <li @click="() => {editarTarefaSelecionada(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
+                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
                             {{ tarefas.descricao}}
                         </li>
                         </ul>
@@ -103,8 +103,7 @@ export default {
                 this.eventRegistered = checkExists
             }
         },
-        editarTarefaSelecionada: function(tarefa){
-            // TODO mostrar painel de edição
+        editSelectedTask: function(tarefa){
             this.$emit('editarTarefa', tarefa)
         }
 
