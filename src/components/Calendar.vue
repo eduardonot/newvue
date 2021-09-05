@@ -1,44 +1,44 @@
 <template>
     <div class="calendar-container">
         <div class="calendar">
-            <FullCalendar :options="calendarOptions"/>
+            <FullCalendar ref="fullCalendar" :options="calendarOptions"/>
         </div>
         <div v-if="hasEventRegistered">
-                <div class="task-list">
-                    <div class="list-display">
-                        <h5>Horário</h5>
-                        <ul>
-                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
-                            {{ tarefas.hora }}
-                        </li>
-                        </ul>
-                    </div>
-                    <div class="list-display">
-                        <h5>Título</h5>
-                        <ul>
-                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
-                            {{ tarefas.title}}
-                        </li>
-                        </ul>
-                    </div>
-                    <div class="list-display">
-                        <h5>Status</h5>
-                        <ul>
-                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
-                            {{ tarefas.status}}
-                        </li>
-                        </ul>
-                    </div>
-                    <div class="list-display">
-                        <h5>Descrição</h5>
-                        <ul>
-                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
-                            {{ tarefas.descricao}}
-                        </li>
-                        </ul>
-                    </div>
+            <div class="task-list">
+                <div class="list-display">
+                    <h5>Horário</h5>
+                    <ul>
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
+                        {{ tarefas.hora }}
+                    </li>
+                    </ul>
+                </div>
+                <div class="list-display">
+                    <h5>Título</h5>
+                    <ul>
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
+                        {{ tarefas.title}}
+                    </li>
+                    </ul>
+                </div>
+                <div class="list-display">
+                    <h5>Status</h5>
+                    <ul>
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
+                        {{ tarefas.status}}
+                    </li>
+                    </ul>
+                </div>
+                <div class="list-display">
+                    <h5>Descrição</h5>
+                    <ul>
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
+                        {{ tarefas.descricao}}
+                    </li>
+                    </ul>
                 </div>
             </div>
+        </div>
     </div>
 </template>
 <script>
@@ -49,6 +49,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import ptLocale from '@fullcalendar/core/locales/pt-br'
 
 export default {
+    name:'Calendar',
     data() {
         return {
             hasEventRegistered: false,
@@ -104,8 +105,8 @@ export default {
     },
     computed:{
         newEventRegistered: function(){
-            let teste = this.eventRegistered
-            teste.sort(function (a, b){
+            let sortByHour = this.eventRegistered
+            sortByHour.sort(function (a, b){
                 if (a.hora > b.hora){
                     return 1
                 }
@@ -114,7 +115,7 @@ export default {
                 }
                 return 0
             })
-            return teste
+            return sortByHour
         }
     },
     components:{
@@ -128,6 +129,12 @@ export default {
         },
         editConfirm:{
             type: Object,
+        },
+        deleteConfirm:{
+            type: Object
+        },
+        changeStatus:{
+            type: String,
         }
     },
     watch:{
@@ -155,6 +162,24 @@ export default {
                     getDay.title = tarefa.tarefas.title
                     getDay.hora = tarefa.tarefas.hora
                     getDay.descricao = tarefa.tarefas.description
+                }
+            }
+        },
+        changeStatus: {
+            handler: function (tarefa) {
+                if(tarefa) {
+                    let getDay = this.calendarOptions.events.find(x => x == tarefa.getInitialTaskValues)
+                    getDay.status = tarefa.tarefas.status
+                }
+            }
+        },
+        deleteConfirm: {
+            handler: function (tarefa) {
+                if(tarefa) {
+                    let getDay = this.calendarOptions.events.find(x => x == tarefa.getInitialTaskValues)
+                    let taskIndex = this.calendarOptions.events.indexOf(getDay)
+                    this.calendarOptions.events.splice(taskIndex, 1)
+                    this.unselect()
                 }
             }
         }
@@ -265,5 +290,19 @@ export default {
     }
 
     /* FIM FULL CALENDAR */
+
+    @media (max-width: 768px){
+        .task-list{
+            width:100%;
+            max-height: 350px;
+            display:flex;
+            flex-direction:row;
+            justify-content:space-between;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+        }
+    }
+    
+
 
 </style>

@@ -61,9 +61,9 @@
                 <p>Eduardo Vinicius Lourenço dos Santos</p>
             </div>
             <div class="social">
-                <a href=""><img src="./../../public/icons/github-logo.png"/></a>
-                <a href=""><img src="./../../public/icons/email-logo.png"/></a>
-                <a href=""><img src="./../../public/icons/facebook-logo.png"/></a>
+                <a href="https://github.com/eduardonot"><img src="./../../public/icons/github-logo.png"/></a>
+                <a href="mailto:eduardo_not@hotmail.com"><img src="./../../public/icons/email-logo.png"/></a>
+                <a href="https://facebook.com/EduardoVLourenco"><img src="./../../public/icons/facebook-logo.png"/></a>
             </div>
             <p>Task Manager - 2021 - ALL RIGHTS RESERVED</p>
         </div>

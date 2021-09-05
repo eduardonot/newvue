@@ -17,13 +17,14 @@
         <!-- DIV EDITAR SELECIONADO -->
         <div class="task-panel" v-if="editTarefaPanel">
             <h5 class="painel-caption">Título</h5>
-            <input class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="edit-titulo"/>
+            <input v-model="getTitleToEdit" class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="edit-titulo"/>
             <h5 class="painel-caption">Hora</h5>
-            <input class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
+            <input v-model="getHoraToEdit" class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
             <h5 class="painel-caption">Descrição</h5>
-            <input class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
+            <input v-model="getDescricaoToEdit" class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
             <button @click="() => { confirmEditBtn() }" class="btn-azul">confirmar edição</button>
-            <button @click="() => { markAsFinished() }" class="btn-verde">Marcar como concluída</button>
+            <button v-if="!showFinishTaskBtn" @click="() => { markAsFinished() }" class="btn-verde">Marcar como concluída</button>
+            <button v-if="showFinishTaskBtn" @click="() => { markAsUnfinished() }" class="btn-rosa">Marcar como não concluída</button>
             <button @click="() => { cancel() }" class="btn-rosa">cancelar</button>  
         </div>
         
@@ -32,18 +33,26 @@
             <div>
                 <button v-if="showAddTaskBtn" @click="() => { addTask() }" class="btn-verde">adicionar novo</button>
                 <button v-if="showEditTaskBtn" @click="() => { editTask() }" class="btn-azul">editar selecionado</button>
-                <!-- TODO EXCLUIR -->
-                <button v-if= "showDelTaskBtn" @click="() => { delTask() }" class="btn-rosa">excluir</button>
+                <button v-if="showDelTaskBtn" @click="() => { delTask() }" class="btn-rosa">excluir</button>
             </div>
         </div>
+
+        <!-- DELETE MODAL -->
+        <ConfirmDeleteModal
+            v-if = "openDeleteModal"
+            @cancelDelete = "cancelDeleteBtn"
+            @confirmDelete = "confirmDeleteBtn"
+        />
         
     </div>
 </template>
 <script>
+import ConfirmDeleteModal from './ConfirmDeleteModal.vue'
 export default {
     name:'TaskPanel',
     data() {
         return {
+            openDeleteModal:false,
         }
     },
     methods: {
@@ -62,7 +71,7 @@ export default {
             }
         },
         delTask(){
-            // TODO DELETE
+            this.openDeleteModal = true
         },
         cancel(){
             this.$emit('clickedCancelBtn')
@@ -77,9 +86,57 @@ export default {
                 return
             }
             console.log('nao preenchido')
-            }
+            },
+        markAsFinished() {
+            this.$emit('clickedMarkAsFinishedBtn')
+        },
+        markAsUnfinished(){
+            this.$emit('clickedMarkAsUnninishedBtn')
+        },
+        cancelDeleteBtn(){
+            this.openDeleteModal = false
+        },
+        confirmDeleteBtn(){
+            this.openDeleteModal = false
+            this.$emit('clickedConfirmDeleteBtn')
+        },
     },
+
+    components:{
+        ConfirmDeleteModal
+        },
+
+    computed:{
+        getTitleToEdit:{
+            get (){
+                return this.initialTaskFieldToEdit.title
+            },
+            set(){
+                this.initialTaskFieldToEdit.title
+            }
+        },
+        getHoraToEdit:{
+            get (){
+                return this.initialTaskFieldToEdit.hora
+            },
+            set(){
+                this.initialTaskFieldToEdit.hora
+            }
+        },
+        getDescricaoToEdit:{
+            get (){
+                return this.initialTaskFieldToEdit.descricao
+            },
+            set(){
+                this.initialTaskFieldToEdit.descricao
+            }
+        }
+    },
+
     props:{
+        initialTaskFieldToEdit:{
+            type: Object
+        },
         inputDateStringField:{
             type: String,
             default: ''
@@ -120,7 +177,12 @@ export default {
             type: Boolean,
             default: false  
         },
-    }
+        showUnfinishTaskBtn:{
+            type: Boolean,
+            default: false  
+        },
+    },
+
 }
 </script>
 <style >
@@ -131,6 +193,7 @@ export default {
         flex-direction:column;
         align-items: center;
         padding:10px;
+        overflow:hidden;
     }
 
     .task-panel{

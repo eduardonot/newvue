@@ -1,4 +1,4 @@
- <template>
+<template>
     <div class="dashboard-container">
         <div class="s2">
             <Panel/>
@@ -9,7 +9,9 @@
             @clickedDate = "calendarClickedDate" 
             @unselect = "unselectDate" 
             :newTask = "novaTarefaData"
-            :editConfirm = "sendTaskFieldToEdit"/>
+            :editConfirm = "sendTaskFieldToEdit"
+            :deleteConfirm = "sendTaskFieldToDelete"
+            />
         </div>
         <div class="s2">
             <TaskPanel 
@@ -19,6 +21,9 @@
             @clickedEditTaskBtn = "clickedEditTask"
             @clickedConfirmAddBtn = "clickedConfirmAdd"
             @clickedCancelBtn = "unselectDate"
+            @clickedMarkAsFinishedBtn = "markAsFinished"
+            @clickedMarkAsUnninishedBtn = "markAsUnfinished"
+            @clickedConfirmDeleteBtn = "confirmDeleteTask"
             :addTarefaPanel = "addPanel"
             :editTarefaPanel = "editPanel"
             :showAddTaskBtn = "addTaskBtn" 
@@ -28,8 +33,9 @@
             :showDelTaskBtn = "delTaskBtn"
             :showConfirmEditBtn = "showConfirmEditBtn"
             :showFinishTaskBtn = "showConfirmEditBtn"
-            :inputDateStringField = 'dateToString' 
-            :inputTaskField = "sendTaskFieldToEdit"
+            :showUnfinishTaskBtn = "showUnfinishTaskBtn"
+            :inputDateStringField = "dateToString"
+            :initialTaskFieldToEdit = "fieldsToEdit"
             />
         </div>
     </div>
@@ -43,7 +49,22 @@ export default {
     name:'Dashboard',
     data() {
         return {
-            dateToString:'', addPanel: false, editPanel: false, addTaskBtn: false, editTaskBtn: false, confirmAddTaskBtn: false, cancelBtn: false, delTaskBtn: false, showFinishTaskBtn: false, showConfirmEditBtn: false, novaTarefaData: {},initialTaskFieldToEdit: {}, sendTaskFieldToEdit: {}
+            dateToString:'', 
+            addPanel: false, 
+            editPanel: false, 
+            addTaskBtn: false, 
+            editTaskBtn: false, 
+            confirmAddTaskBtn: false, 
+            cancelBtn: false, 
+            delTaskBtn: false, 
+            showFinishTaskBtn: false, 
+            showUnfinishTaskBtn:false, 
+            showConfirmEditBtn: false, 
+            novaTarefaData: {},
+            initialTaskFieldToEdit: {}, 
+            sendTaskFieldToEdit: {},
+            sendTaskFieldToDelete: {},
+            fieldsToEdit:{}
         }
     },
     methods: {
@@ -60,15 +81,37 @@ export default {
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
         clickedEditTask: function() {
+            if(this.initialTaskFieldToEdit.status == 'Concluído'){
+                this.showConfirmEditBtn = true
+            }
+            if(this.initialTaskFieldToEdit.status !== 'Concluído'){
+                this.showConfirmEditBtn = false
+            }
             this.addPanel = false, this.editPanel = true, this.addTaskBtn = false, this.editTaskBtn = false, this.showEditTaskBtn = false, this.delTaskBtn = false
         },
         editTarefa: function(tarefa){
-            this.addPanel = false,  this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = true, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = true, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false, this.initialTaskFieldToEdit = tarefa
+            this.addPanel = false,  this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = true, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = true, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false, 
+            this.initialTaskFieldToEdit = tarefa
+            this.fieldsToEdit = tarefa
         },
         confirmEditTask: function (tarefas) {
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
             let getInitialTaskValues = this.initialTaskFieldToEdit
             this.sendTaskFieldToEdit = {getInitialTaskValues, tarefas}
+        },
+        confirmDeleteTask: function() {
+            let getInitialTaskValues = this.initialTaskFieldToEdit
+            getInitialTaskValues.delete = true
+            this.sendTaskFieldToDelete = {getInitialTaskValues}
+            this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
+        },
+        markAsFinished: function (){
+            this.initialTaskFieldToEdit.status = 'Concluído'
+            this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
+        },
+        markAsUnfinished: function (){
+            this.initialTaskFieldToEdit.status = 'Não Concluído'
+            this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
         unselectDate: function(){
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false

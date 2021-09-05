@@ -1,7 +1,8 @@
 <template>
     <div class="main">
         <div id="login-form">
-            <div id="login-logo">
+            <div class="panel-logo">
+                <img src="./../../public/icons/stanley-icon.png"/>
             </div>
             <div class="action">
                 <div>
@@ -141,19 +142,19 @@
         a{
             font-size: 12px;
         }
-       #login-form{
-           width: 100%;
-           height: 100%;
-       }
+        #login-form{
+            width: 100%;
+            height: 100%;
+        }
     }
 
     @media (max-width: 768px) {
         a{
             font-size: 11px;
         }
-       #login-form{
-           width: 100%;
-           height: 100%;
-       }
+        #login-form{
+            width: 100%;
+            height: 100%;
+        }
     }
 </style>
