@@ -12,29 +12,28 @@
             <input class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="add-descricao"/>
             <button @click="() => { confirmAdd() }" class="btn-azul">confirmar</button>
             <button @click="() => { cancel() }" class="btn-rosa">cancelar</button>
-           
         </div>
 
         <!-- DIV EDITAR SELECIONADO -->
         <div class="task-panel" v-if="editTarefaPanel">
             <h5 class="painel-caption">Título</h5>
-            <input v-model="inputTaskField.title" class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="edit-titulo"/>
+            <input class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="edit-titulo"/>
             <h5 class="painel-caption">Hora</h5>
-            <input v-model="inputTaskField.hora" class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
+            <input class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
             <h5 class="painel-caption">Descrição</h5>
-            <input v-model="inputTaskField.descricao" class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
-            <button @click="() => { confirmEdit() }" class="btn-azul">confirmar edição</button>
+            <input class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
+            <button @click="() => { confirmEditBtn() }" class="btn-azul">confirmar edição</button>
             <button @click="() => { markAsFinished() }" class="btn-verde">Marcar como concluída</button>
-            <button v-if="showDelTaskBtn" @click="() => { delTask() }" class="btn-rosa">excluir</button>
+            <button @click="() => { cancel() }" class="btn-rosa">cancelar</button>  
         </div>
         
         <div class="task-panel">
         <!-- BOTOES -->
             <div>
-            <!-- TODO ADICIONAR -->
                 <button v-if="showAddTaskBtn" @click="() => { addTask() }" class="btn-verde">adicionar novo</button>
-            <!-- TODO EDITAR -->
                 <button v-if="showEditTaskBtn" @click="() => { editTask() }" class="btn-azul">editar selecionado</button>
+                <!-- TODO EXCLUIR -->
+                <button v-if= "showDelTaskBtn" @click="() => { delTask() }" class="btn-rosa">excluir</button>
             </div>
         </div>
         
@@ -49,25 +48,24 @@ export default {
     },
     methods: {
         addTask(){
-            this.addTarefaPanel = true
-            this.editTarefaPanel = false
-            this.showAddTaskBtn = false
-            this.showEditTaskBtn = false
-            this.showDelTaskBtn = false
+            this.$emit('clickedAddTaskBtn')
         },
         editTask(){
-            // TODO EDIT
-            this.editTarefaPanel = true
-            this.addTarefaPanel = false
-            this.showAddTaskBtn = false
-            this.showEditTaskBtn = false
-            this.showDelTaskBtn = true
+            this.$emit('clickedEditTaskBtn')
+        },
+        confirmEditBtn() {
+            let title = this.$refs['edit-titulo'].value
+            let hora = this.$refs['edit-hora'].value
+            let description = this.$refs['edit-descricao'].value
+            if( title !== '' && hora !== ''){
+                this.$emit('confirmEdit', {title, hora, description})
+            }
         },
         delTask(){
             // TODO DELETE
         },
         cancel(){
-            // TODO CANCEL
+            this.$emit('clickedCancelBtn')
         },
         confirmAdd(){
             let data = this.$refs['add-data'].value
@@ -76,22 +74,15 @@ export default {
             let descricao = this.$refs['add-descricao'].value
             if (data !== '' && titulo !== '' && hora !== ''){
                 this.$emit('novatarefa', {data, titulo, hora, descricao})
-                this.addTarefaPanel = false, this.editTarefaPanel = false, this.delTarefa = false, this.addOptions = false, this.editOptions = false
                 return
             }
             console.log('nao preenchido')
-            },
-        concluir(){
-            // TODO CONCLUIR
-        }
+            }
     },
     props:{
         inputDateStringField:{
             type: String,
             default: ''
-        },
-        inputTaskField:{
-            type: Object
         },
         addTarefaPanel:{
             type: Boolean,
@@ -128,7 +119,7 @@ export default {
         showFinishTaskBtn:{
             type: Boolean,
             default: false  
-        }
+        },
     }
 }
 </script>

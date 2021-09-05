@@ -1,4 +1,4 @@
- <template>
+<template>
     <div class="calendar-container">
         <div class="calendar">
             <FullCalendar :options="calendarOptions"/>
@@ -8,7 +8,7 @@
                     <div class="list-display">
                         <h5>Horário</h5>
                         <ul>
-                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
+                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
                             {{ tarefas.hora }}
                         </li>
                         </ul>
@@ -16,7 +16,7 @@
                     <div class="list-display">
                         <h5>Título</h5>
                         <ul>
-                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
+                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
                             {{ tarefas.title}}
                         </li>
                         </ul>
@@ -24,7 +24,7 @@
                     <div class="list-display">
                         <h5>Status</h5>
                         <ul>
-                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
+                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
                             {{ tarefas.status}}
                         </li>
                         </ul>
@@ -32,7 +32,7 @@
                     <div class="list-display">
                         <h5>Descrição</h5>
                         <ul>
-                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.eventRegistered" :key="tarefas.title" >
+                        <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
                             {{ tarefas.descricao}}
                         </li>
                         </ul>
@@ -52,7 +52,7 @@ export default {
     data() {
         return {
             hasEventRegistered: false,
-            eventRegistered:{},
+            eventRegistered:[],
             calendarOptions: {
                 events:[],
                 locale: ptLocale,
@@ -68,10 +68,6 @@ export default {
                 },
                 footerToolbar:{center:'addEventButton'},
                 customButtons:{
-                    // addEventButton:{
-                    //     text:'Clique',
-                    //     click:this.newEvent
-                    // }
                 },
                 dateClick: this.dateClick,
                 select: this.dateClick,
@@ -97,7 +93,6 @@ export default {
             if (checkExists.length === 0) {
                 this.hasEventRegistered = false
                 return
-                 
             } else {
                 this.hasEventRegistered = true
                 this.eventRegistered = checkExists
@@ -106,7 +101,21 @@ export default {
         editSelectedTask: function(tarefa){
             this.$emit('editarTarefa', tarefa)
         }
-
+    },
+    computed:{
+        newEventRegistered: function(){
+            let teste = this.eventRegistered
+            teste.sort(function (a, b){
+                if (a.hora > b.hora){
+                    return 1
+                }
+                if (b.hora > a.hora){
+                    return -1
+                }
+                return 0
+            })
+            return teste
+        }
     },
     components:{
         FullCalendar
@@ -116,6 +125,9 @@ export default {
             type: Object,
             required: true,
             default: () => {}
+        },
+        editConfirm:{
+            type: Object,
         }
     },
     watch:{
@@ -133,6 +145,16 @@ export default {
                         allDay: true,
                     })
                     this.unselect()
+                }
+            }
+        },
+        editConfirm: {
+            handler: function (tarefa) {
+                if(tarefa) {
+                    let getDay = this.calendarOptions.events.find(x => x == tarefa.getInitialTaskValues)
+                    getDay.title = tarefa.tarefas.title
+                    getDay.hora = tarefa.tarefas.hora
+                    getDay.descricao = tarefa.tarefas.description
                 }
             }
         }
