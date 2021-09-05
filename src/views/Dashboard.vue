@@ -1,9 +1,15 @@
 <template>
     <div class="dashboard-container">
-        <div class="s2">
+        <div class="header-title">
+            <button><span class="material-icons">list</span></button>
+            <div class="panel-logo">
+                <img src="./../../public/icons/stanley-icon.png"/>
+            </div>
+        </div>
+        <div class="s2 left-side-panel">
             <Panel/>
         </div>
-        <div class="s6">
+        <div class="s6 center-panel">
             <Calendar 
             @editarTarefa = "editTarefa" 
             @clickedDate = "calendarClickedDate" 
@@ -13,7 +19,7 @@
             :deleteConfirm = "sendTaskFieldToDelete"
             />
         </div>
-        <div class="s2">
+        <div ref="right-panel" class="s2 right-side-panel">
             <TaskPanel 
             @novatarefa = "addTarefa" 
             @confirmEdit = "confirmEditTask"
@@ -69,6 +75,9 @@ export default {
     },
     methods: {
         calendarClickedDate: function(date) {
+            if(this.$refs['right-panel'].style.display !== 'none'){
+                this.$refs['right-panel'].style.display = 'flex'
+            }
             this.dateToString = date, this.addPanel = false, this.editPanel = false, this.addTaskBtn = true, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
         clickedAddTask: function() {
@@ -114,6 +123,7 @@ export default {
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
         unselectDate: function(){
+            this.$refs['right-panel'].style.display = 'none'
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         }
     },
@@ -198,4 +208,46 @@ export default {
     .s10{
         width:100%;
     }
+    .header-title{
+        display:none;
+    }
+    @media (max-width: 767px) {
+        .dashboard-container{
+            flex-direction:column;
+            justify-content:flex-start;
+            align-items: center;
+        }
+        .center-panel{
+            width:100% !important;
+        }
+        .left-side-panel{
+            display:none;
+        }
+        .right-side-panel{
+            display:none;
+        }
+        .header-title{
+            width: 100%;
+            height: 75px;
+            margin: 0px;
+            padding: 0px 15px 0px 15px;
+            display:flex;
+            flex-direction:row;
+            top:0;
+            left:0;
+            visibility: visible !important;
+            background-color: rgba(0,0,255, 0.05)
+        }
+        .header-title > .panel-logo{
+            padding: 15px;
+            margin:0 auto;
+            min-width:auto !important;
+            min-height:auto !important;
+        }
+
+        .header-title > .panel-logo img{
+            max-width:50px;
+        }
+    }
+
 </style>

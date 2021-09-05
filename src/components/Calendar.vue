@@ -67,7 +67,6 @@ export default {
                     center: 'title',
                     right: 'next'
                 },
-                footerToolbar:{center:'addEventButton'},
                 customButtons:{
                 },
                 dateClick: this.dateClick,
@@ -75,6 +74,12 @@ export default {
                 
             },
         }
+    },
+    mounted(){
+        if (window.innerWidth > 767){
+            return this.calendarOptions.height = 500
+        }
+        return this.calendarOptions.height = 350
     },
     methods: {
         unselect (){
@@ -291,7 +296,7 @@ export default {
 
     /* FIM FULL CALENDAR */
 
-    @media (max-width: 768px){
+    @media (max-width: 767px){
         .task-list{
             width:100%;
             max-height: 350px;

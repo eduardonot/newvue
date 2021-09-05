@@ -191,16 +191,16 @@ export default {
     }
 
     @media (max-width: 1024px) {
-       .form-input{
-           font-size:12px;
+        .form-input{
+            font-size:12px;
             width:100%;
             height:auto;
             padding:5px 10px 5px 10px;
-       }
+        }
 
-       .question-btn{
-           font-size:10px;
-           padding:5px 10px 5px 10px;
-       }
+        .question-btn{
+            font-size:10px;
+            padding:5px 10px 5px 10px;
+        }
     }
 </style>
