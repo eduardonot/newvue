@@ -67,4 +67,14 @@
         max-width:100px !important;
         margin:5px;
     }
+
+    @media (max-width: 767px){
+        .modal-box{
+            width:100% !important;
+            height:100% !important;
+            display:flex;
+            flex-direction:column;
+            justify-content: center;
+        }
+    }
 </style>

@@ -32,6 +32,7 @@
         <!-- BOTOES -->
             <div>
                 <button v-if="showAddTaskBtn" @click="() => { addTask() }" class="btn-verde">adicionar novo</button>
+                <button v-if="showAddTaskBtn" @click="() => { cancel() }" class="btn-rosa">cancelar</button>
                 <button v-if="showEditTaskBtn" @click="() => { editTask() }" class="btn-azul">editar selecionado</button>
                 <button v-if="showDelTaskBtn" @click="() => { delTask() }" class="btn-rosa">excluir</button>
             </div>

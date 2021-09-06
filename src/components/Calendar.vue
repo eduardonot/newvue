@@ -8,7 +8,7 @@
                 <div class="list-display">
                     <h5>Horário</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.id" >
                         {{ tarefas.hora }}
                     </li>
                     </ul>
@@ -16,7 +16,7 @@
                 <div class="list-display">
                     <h5>Título</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.id" >
                         {{ tarefas.title}}
                     </li>
                     </ul>
@@ -24,7 +24,7 @@
                 <div class="list-display">
                     <h5>Status</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.id" >
                         {{ tarefas.status}}
                     </li>
                     </ul>
@@ -32,7 +32,7 @@
                 <div class="list-display">
                     <h5>Descrição</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.hora" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.id" >
                         {{ tarefas.descricao}}
                     </li>
                     </ul>
@@ -77,8 +77,12 @@ export default {
     },
     mounted(){
         if (window.innerWidth > 767){
+            console.warn(`A largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`)
+            console.warn(`Caso queira, reajuste a dimensão de exibição e pressione F5 para recarregar a página.`)
             return this.calendarOptions.height = 500
         }
+        console.warn(`%cA largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`, 'color: white; font-weight:700; font-size:18px;')
+        console.warn(`%cCaso queira, reajuste a dimensão de exibição e pressione F5 para recarregar a página.`, 'color: white; font-weight:700; font-size:16px;')   
         return this.calendarOptions.height = 350
     },
     methods: {
@@ -200,13 +204,11 @@ export default {
         flex-direction:column;
         overflow:hidden;
     }
-
     .calendar{
         width:100%;
         padding:10px;
         overflow:hidden !important;
     }
-
     .task-list{
         width:100%;
         max-height: 250px;
@@ -216,7 +218,6 @@ export default {
         overflow-x: hidden !important;
         overflow-y: auto !important;
     }
-
     .list-display{
         width:100%;
         text-align:left;
@@ -224,7 +225,6 @@ export default {
         flex-direction:column;
         
     }
-
     .event-list-display{
         list-style-type: none;
         height: 25px;
@@ -234,17 +234,14 @@ export default {
         overflow-x: hidden !important;
         overflow-y: auto !important;
     }
-
     /* EXCLUSIVO FULL CALENDAR*/
     .fc-toolbar-title{
         text-transform: uppercase;
         font-weight: 400;
     }
-
     .fc-prev-button, .fc-button, .fc-button-primary{
         padding:10px !important;
     }
-
     .fc-toolbar-chunk button{
         background-color: rgba(255, 255, 255, 0) !important;
         border: none !important;
@@ -253,17 +250,14 @@ export default {
         justify-content: center;
         align-items: center;
     }
-
     .fc-daygrid-bg-harness{
         background-color:rgba(93, 131, 255, 0.164) !important;
     }
-
     .fc-toolbar-chunk span {
         text-align: center;
         font-size: 25px !important;
         color:black !important;
     }
-
     .fc-addEventButton-button{
         color:black !important;
         font-size: 14px !important;
@@ -271,7 +265,6 @@ export default {
     .fc-daygrid-day-top{
         background-color: rgba(0, 0, 255, 0.02);
     }
-    
     .fc-daygrid-day-events{
         font-size:10px;
         max-height:40px;
@@ -282,13 +275,9 @@ export default {
     .fc-day:active{
         background-color: rgba(0, 0, 255, 0.05);
     }
-
     .fc-day:hover{
         background-color: rgba(0, 0, 255, 0.05);
     }
-
-    
-
     .fc-sticky{
         font-size:9px;
         font-weight:normal;
@@ -296,18 +285,35 @@ export default {
 
     /* FIM FULL CALENDAR */
 
+    /* MEDIA QUERY MOBILE E TABLET */
     @media (max-width: 767px){
+        .fc-toolbar-title{
+            font-size:18px !important;
+        }
         .task-list{
+            margin: 0 auto;
             width:100%;
-            max-height: 350px;
+            padding:5px 10px 5px 10px;
+            max-height: 150px;
             display:flex;
             flex-direction:row;
             justify-content:space-between;
             overflow-x: hidden !important;
             overflow-y: auto !important;
         }
+        .list-display li{
+            font-size:12px;
+        }
     }
-    
 
-
+    @media (max-height: 640px){
+        .task-list{
+            max-height: 170px;
+        }
+    }
+    @media (max-height: 812px){
+        .task-list{
+            max-height: 270px;
+        }
+    }
 </style>

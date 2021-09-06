@@ -1,23 +1,24 @@
 <template>
     <div class="dashboard-container">
         <div class="header-title">
-            <button><span class="material-icons">list</span></button>
+            <button @click="showuserpanel"><span class="material-icons">list</span></button>
             <div class="panel-logo">
                 <img src="./../../public/icons/stanley-icon.png"/>
             </div>
         </div>
-        <div class="s2 left-side-panel">
+        <div ref="left-panel" class="s2 left-side-panel">
             <Panel/>
         </div>
-        <div class="s6 center-panel">
-            <Calendar 
-            @editarTarefa = "editTarefa" 
-            @clickedDate = "calendarClickedDate" 
-            @unselect = "unselectDate" 
-            :newTask = "novaTarefaData"
-            :editConfirm = "sendTaskFieldToEdit"
-            :deleteConfirm = "sendTaskFieldToDelete"
-            />
+        <div ref="transparentmodal" @click="unselectDate" class="center-panel-screen"></div>
+            <div class="s6 center-panel">
+                <Calendar 
+                @editarTarefa = "editTarefa" 
+                @clickedDate = "calendarClickedDate" 
+                @unselect = "unselectDate" 
+                :newTask = "novaTarefaData"
+                :editConfirm = "sendTaskFieldToEdit"
+                :deleteConfirm = "sendTaskFieldToDelete"
+                />
         </div>
         <div ref="right-panel" class="s2 right-side-panel">
             <TaskPanel 
@@ -73,10 +74,32 @@ export default {
             fieldsToEdit:{}
         }
     },
+    mounted(){
+        if (window.innerWidth < 768){
+            this.$refs['left-panel'].style.display = 'none'
+            this.$refs['right-panel'].style.display = 'none'
+            this.$refs['transparentmodal'].style.display = 'none'
+        }
+    },
     methods: {
+        showuserpanel: function(){
+            if(this.$refs['left-panel'].style.display !== 'none'){
+                this.$refs['left-panel'].style.display = 'flex'
+                this.$refs['transparentmodal'].style.display = 'flex'
+            }
+            if(this.$refs['left-panel'].style.display == 'none'){
+                this.$refs['left-panel'].style.display = 'flex'
+                this.$refs['transparentmodal'].style.display = 'flex'
+            }
+        },
         calendarClickedDate: function(date) {
             if(this.$refs['right-panel'].style.display !== 'none'){
                 this.$refs['right-panel'].style.display = 'flex'
+                this.$refs['transparentmodal'].style.display = 'flex'
+            }
+            if(this.$refs['right-panel'].style.display == 'none'){
+                this.$refs['right-panel'].style.display = 'flex'
+                this.$refs['transparentmodal'].style.display = 'flex'
             }
             this.dateToString = date, this.addPanel = false, this.editPanel = false, this.addTaskBtn = true, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
@@ -90,6 +113,7 @@ export default {
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
         clickedEditTask: function() {
+            
             if(this.initialTaskFieldToEdit.status == 'Concluído'){
                 this.showConfirmEditBtn = true
             }
@@ -99,31 +123,63 @@ export default {
             this.addPanel = false, this.editPanel = true, this.addTaskBtn = false, this.editTaskBtn = false, this.showEditTaskBtn = false, this.delTaskBtn = false
         },
         editTarefa: function(tarefa){
+            if(this.$refs['right-panel'].style.display !== 'none'){
+                this.$refs['right-panel'].style.display = 'flex'
+                this.$refs['transparentmodal'].style.display = 'flex'
+            }
+            if(this.$refs['right-panel'].style.display == 'none'){
+                this.$refs['right-panel'].style.display = 'flex'
+                this.$refs['transparentmodal'].style.display = 'flex'
+            }
             this.addPanel = false,  this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = true, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = true, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false, 
             this.initialTaskFieldToEdit = tarefa
             this.fieldsToEdit = tarefa
         },
         confirmEditTask: function (tarefas) {
+            if(window.innerWidth < 768){
+                this.$refs['right-panel'].style.display = 'none'
+                this.$refs['left-panel'].style.display = 'none'
+                this.$refs['transparentmodal'].style.display = 'none'
+            }
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
             let getInitialTaskValues = this.initialTaskFieldToEdit
             this.sendTaskFieldToEdit = {getInitialTaskValues, tarefas}
         },
         confirmDeleteTask: function() {
+            if(window.innerWidth < 768){
+                this.$refs['right-panel'].style.display = 'none'
+                this.$refs['left-panel'].style.display = 'none'
+                this.$refs['transparentmodal'].style.display = 'none'
+            }
             let getInitialTaskValues = this.initialTaskFieldToEdit
             getInitialTaskValues.delete = true
             this.sendTaskFieldToDelete = {getInitialTaskValues}
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
         markAsFinished: function (){
+            if(window.innerWidth < 768){
+                this.$refs['right-panel'].style.display = 'none'
+                this.$refs['left-panel'].style.display = 'none'
+                this.$refs['transparentmodal'].style.display = 'none'
+            }
             this.initialTaskFieldToEdit.status = 'Concluído'
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
         markAsUnfinished: function (){
+            if(window.innerWidth < 768){
+                this.$refs['right-panel'].style.display = 'none'
+                this.$refs['left-panel'].style.display = 'none'
+                this.$refs['transparentmodal'].style.display = 'none'
+            }
             this.initialTaskFieldToEdit.status = 'Não Concluído'
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
         unselectDate: function(){
-            this.$refs['right-panel'].style.display = 'none'
+            if(window.innerWidth < 768){
+                this.$refs['right-panel'].style.display = 'none'
+                this.$refs['left-panel'].style.display = 'none'
+                this.$refs['transparentmodal'].style.display = 'none'
+            }
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         }
     },
@@ -211,20 +267,49 @@ export default {
     .header-title{
         display:none;
     }
+    
     @media (max-width: 767px) {
         .dashboard-container{
             flex-direction:column;
             justify-content:flex-start;
             align-items: center;
         }
-        .center-panel{
-            width:100% !important;
+        .center-panel-screen{
+            display:none;
+            position:fixed;
+            right:0;
+            height:100%;
+            width:100%;
+            background-color:rgb(240, 240, 240, 0.7);
+            z-index:2;
         }
         .left-side-panel{
             display:none;
+            position:absolute;
+            left:0;
+            height:100%;
+            width:80%;
+            background-color:rgba(230, 230, 230, 1);
+            z-index:3;
+            box-shadow: -4px 3px 12px -1px rgba(0,0,0,0.75);
+            -webkit-box-shadow: -4px 3px 12px -1px rgba(0,0,0,0.75);
+            -moz-box-shadow: -4px 3px 12px -1px rgba(0,0,0,0.75);
+        }
+
+        .center-panel{
+            width:100% !important;
         }
         .right-side-panel{
             display:none;
+            position:absolute;
+            right:0;
+            height:100%;
+            width:80%;
+            background-color:rgba(230, 230, 230, 1);
+            z-index:3;
+            box-shadow: -4px 3px 12px -1px rgba(0,0,0,0.75);
+            -webkit-box-shadow: -4px 3px 12px -1px rgba(0,0,0,0.75);
+            -moz-box-shadow: -4px 3px 12px -1px rgba(0,0,0,0.75);
         }
         .header-title{
             width: 100%;
