@@ -14,20 +14,21 @@
         <!-- PAINEL DE PESQUISA -->
         <div v-if="search" class="painel">
             <h5 class="painel-caption">Digite o título</h5>
-            <div ref="search-titulo" class="search-field"><input class="form-input" type="text" placeholder="TITULO"/></div>
+            <div class="search-field"><input ref="search-titulo"  class="form-input" type="text" placeholder="TITULO"/></div>
             <h5 class="painel-caption">Intervalo | Data Inicial</h5>
-            <div ref="search-data-inicial" class="search-field"><input class="form-input" type="date"/></div>
+            <div class="search-field"><input ref="search-data-inicial" class="form-input" type="date"/></div>
             <h5 class="painel-caption">Intervalo | Data Final</h5>
-            <div ref="search-data-final" class="search-field"><input class="form-input" type="date"/></div>
+            <div class="search-field"><input ref="search-data-final" class="form-input" type="date"/></div>
             <h5 class="painel-caption">Status</h5>
             <div class="search-field dropdown">
-                <select class="form-input">
-                    <option disabled hidden selected>SELECIONE</option>
-                    <option ref="search-concluido" value="">Concluído</option>
-                    <option ref="search-nao-concluido" value="">Não Concluído</option>
+                <select ref="status-option" id="status-option" class="form-input">
+                    <option disabled hidden value='' selected>SELECIONE</option>
+                    <option ref="search-concluido" value="Concluído">Concluído</option>
+                    <option ref="search-nao-concluido" value="Não Concluído">Não Concluído</option>
+                    <option ref="search-ambos" value="Ambos">Ambos</option>
                 </select>
             </div>
-            <button class="btn-select btn-submit">PESQUISAR</button>
+            <button @click="newSearch" class="btn-select btn-submit">PESQUISAR</button>
         </div>
 
         <!-- PAINEL DE CONFIGURACOES -->
@@ -79,6 +80,7 @@ export default {
             settings:0, 
             question:0, 
             info:0,
+            searchCriteria:{},
         }
     },
     methods:{
@@ -93,8 +95,22 @@ export default {
         },
         showInfo() {
             this.search=0, this.settings=0, this.question=0, this.info=1 
+        },
+        newSearch(){
+            this.searchCriteria = {
+                title: this.$refs['search-titulo'].value,
+                initialDate: this.$refs['search-data-inicial'].value,
+                finalDate: this.$refs['search-data-final'].value,
+                status: this.$refs['status-option'].value
+            }
+            if(!this.searchCriteria.title || !this.searchCriteria.initialDate || !this.searchCriteria.finalDate || !this.searchCriteria.status){
+                return alert('Preencha todos os campos!')
+            }
+            
+            this.$emit('submitSearch', this.searchCriteria)
         }
-    }
+    },
+    
 }
 </script>
 

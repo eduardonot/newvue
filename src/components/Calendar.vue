@@ -77,8 +77,8 @@ export default {
     },
     mounted(){
         if (window.innerWidth > 767){
-            console.warn(`A largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`)
-            console.warn(`Caso queira, reajuste a dimensão de exibição e pressione F5 para recarregar a página.`)
+            console.warn(`%cA largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`, 'color: white; font-weight:700; font-size:18px;')
+            console.warn(`%cCaso queira, reajuste a dimensão de exibição e pressione F5 para recarregar a página.`, 'color: white; font-weight:700; font-size:16px;') 
             return this.calendarOptions.height = 500
         }
         console.warn(`%cA largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`, 'color: white; font-weight:700; font-size:18px;')
