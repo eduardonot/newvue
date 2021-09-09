@@ -156,12 +156,13 @@ export default {
                     let getDay = data.data
                     let splitDay = getDay.split('/')
                     this.calendarOptions.events.push({
-                        title: data.titulo,
+                        title: data.titulo.trim(),
                         hora:data.hora,
                         status: 'Não Concluído',
-                        descricao: data.descricao,
+                        descricao: data.descricao.trim(),
                         start:`${splitDay[2]}-${splitDay[1]}-${splitDay[0]}`,
                         allDay: true,
+                        color:'#f45858'
                     })
                     this.unselect()
                 }
@@ -174,6 +175,7 @@ export default {
                     getDay.title = tarefa.tarefas.title
                     getDay.hora = tarefa.tarefas.hora
                     getDay.descricao = tarefa.tarefas.description
+                    
                 }
             }
         },
@@ -182,6 +184,7 @@ export default {
                 if(tarefa) {
                     let getDay = this.calendarOptions.events.find(x => x == tarefa.getInitialTaskValues)
                     getDay.status = tarefa.tarefas.status
+                    
                 }
             }
         },
@@ -196,12 +199,21 @@ export default {
             }
         },
         searchTask: {
-            handler: function(criteria){
+            handler: async function(criteria){
                 if(criteria){
-                    let searchTitle = this.calendarOptions.events.find(task => task.title.includes(criteria.title))
-                    
+                    let searchTitle = await this.calendarOptions.events.filter(task => task.title.toLowerCase().includes(criteria.title))
+                    let getSearchTitleStatus = await searchTitle.filter(search => search.status == criteria.status)
+                    let getDate = await getSearchTitleStatus.find(date => date.start >= criteria.initialDate && date.start <= criteria.finalDate)
+                    if (!getDate){
+                        return alert('Não foi possível encontrar tarefa com os dados informados.')
+                    }
+                    let calendarApi = this.$refs.fullCalendar.getApi()
+                    calendarApi.gotoDate(getDate.start)
+                    calendarApi.select(getDate.start)
                 }
+                return
             }
+            
         }
     }
 }
@@ -236,10 +248,14 @@ export default {
         
     }
     .event-list-display{
+        display:flex;
+        align-items: center;
         list-style-type: none;
-        height: 25px;
+        height: 35px;
         padding:3px 0px 3px 0px;
         font-size: 14px;
+        margin-bottom:3px;
+        background-color:rgba(93, 131, 255, 0.1);
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         overflow-x: hidden !important;
         overflow-y: auto !important;
@@ -283,14 +299,16 @@ export default {
         text-align: center !important;
     }
     .fc-day:active{
-        background-color: rgba(0, 0, 255, 0.05);
+        background-color: rgba(0, 0, 255, 0.15);
     }
     .fc-day:hover{
-        background-color: rgba(0, 0, 255, 0.05);
+        background-color: rgba(0, 0, 255, 0.15);
     }
     .fc-sticky{
-        font-size:9px;
+        font-family: 'Roboto', sans-serif;
+        font-size:10px;
         font-weight:normal;
+        letter-spacing: 0.3px;
     }
 
     /* FIM FULL CALENDAR */
@@ -318,12 +336,12 @@ export default {
 
     @media (max-height: 640px){
         .task-list{
-            max-height: 170px;
+            max-height: 185px !important;
         }
     }
     @media (max-height: 812px){
         .task-list{
-            max-height: 270px;
+            max-height: 355px;
         }
     }
 </style>

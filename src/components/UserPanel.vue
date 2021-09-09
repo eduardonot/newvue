@@ -25,7 +25,6 @@
                     <option disabled hidden value='' selected>SELECIONE</option>
                     <option ref="search-concluido" value="Concluído">Concluído</option>
                     <option ref="search-nao-concluido" value="Não Concluído">Não Concluído</option>
-                    <option ref="search-ambos" value="Ambos">Ambos</option>
                 </select>
             </div>
             <button @click="newSearch" class="btn-select btn-submit">PESQUISAR</button>
@@ -98,7 +97,7 @@ export default {
         },
         newSearch(){
             this.searchCriteria = {
-                title: this.$refs['search-titulo'].value,
+                title: this.$refs['search-titulo'].value.toLowerCase(),
                 initialDate: this.$refs['search-data-inicial'].value,
                 finalDate: this.$refs['search-data-final'].value,
                 status: this.$refs['status-option'].value

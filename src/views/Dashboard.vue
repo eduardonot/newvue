@@ -86,8 +86,8 @@ export default {
         }
     },
     methods: {
-        searchTask: function (criteria){
-            this.fieldsToSearch = criteria
+        searchTask: async function (criteria){
+            this.fieldsToSearch = await criteria
         },
         showuserpanel: function(){
             if(this.$refs['left-panel'].style.display !== 'none'){
@@ -170,6 +170,8 @@ export default {
                 this.$refs['transparentmodal'].style.display = 'none'
             }
             this.initialTaskFieldToEdit.status = 'Concluído'
+            // this.initialTaskFieldToEdit.color = '#69b1f4' 
+            this.initialTaskFieldToEdit.color = '#29aa54'
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
         markAsUnfinished: function (){
@@ -179,6 +181,7 @@ export default {
                 this.$refs['transparentmodal'].style.display = 'none'
             }
             this.initialTaskFieldToEdit.status = 'Não Concluído'
+            this.initialTaskFieldToEdit.color = '#f45858'
             this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
         },
         unselectDate: function(){
