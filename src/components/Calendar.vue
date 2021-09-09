@@ -144,6 +144,9 @@ export default {
         },
         changeStatus:{
             type: String,
+        },
+        searchTask:{
+            type: Object
         }
     },
     watch:{
@@ -191,10 +194,17 @@ export default {
                     this.unselect()
                 }
             }
+        },
+        searchTask: {
+            handler: function(criteria){
+                if(criteria){
+                    let searchTitle = this.calendarOptions.events.find(task => task.title.includes(criteria.title))
+                    
+                }
+            }
         }
     }
 }
-
 </script>
 <style>
     .calendar-container{

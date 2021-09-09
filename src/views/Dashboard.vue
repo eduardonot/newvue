@@ -7,7 +7,9 @@
             </div>
         </div>
         <div ref="left-panel" class="s2 left-side-panel">
-            <Panel/>
+            <Panel
+                @submitSearch = "searchTask"
+            />
         </div>
         <div ref="transparentmodal" @click="unselectDate" class="center-panel-screen"></div>
             <div class="s6 center-panel">
@@ -18,6 +20,7 @@
                 :newTask = "novaTarefaData"
                 :editConfirm = "sendTaskFieldToEdit"
                 :deleteConfirm = "sendTaskFieldToDelete"
+                :searchTask = "fieldsToSearch"
                 />
         </div>
         <div ref="right-panel" class="s2 right-side-panel">
@@ -71,7 +74,8 @@ export default {
             initialTaskFieldToEdit: {}, 
             sendTaskFieldToEdit: {},
             sendTaskFieldToDelete: {},
-            fieldsToEdit:{}
+            fieldsToEdit:{},
+            fieldsToSearch:{}
         }
     },
     mounted(){
@@ -82,6 +86,9 @@ export default {
         }
     },
     methods: {
+        searchTask: function (criteria){
+            this.fieldsToSearch = criteria
+        },
         showuserpanel: function(){
             if(this.$refs['left-panel'].style.display !== 'none'){
                 this.$refs['left-panel'].style.display = 'flex'
