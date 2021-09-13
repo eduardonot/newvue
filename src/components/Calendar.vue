@@ -75,6 +75,9 @@ export default {
             },
         }
     },
+    created(){
+        return this.calendarOptions.events = JSON.parse(localStorage.getItem('eventList'))
+    },
     mounted(){
         if (window.innerWidth > 767){
             console.warn(`%cA largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`, 'color: white; font-weight:700; font-size:18px;')
@@ -164,6 +167,7 @@ export default {
                         allDay: true,
                         color:'#f45858'
                     })
+                    localStorage.setItem('eventList', JSON.stringify(this.calendarOptions.events))
                     this.unselect()
                 }
             }
