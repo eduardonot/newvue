@@ -94,7 +94,7 @@ export default {
         testar() {
             apiService.post('/user', {
                 name: 'Usuario1',
-                telegram_ID: 'ID_Tele',
+                telegram_ID: 12312,
                 email:'eduardo@not.com',
                 pass1:'Admin123!',
                 pass2:'Admin123!'
