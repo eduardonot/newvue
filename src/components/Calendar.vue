@@ -3,6 +3,7 @@
         <div class="calendar">
             <FullCalendar ref="fullCalendar" :options="calendarOptions"/>
         </div>
+        <button @click="testar">aperte aqui para testar</button>
         <div v-if="hasEventRegistered">
             <div class="task-list">
                 <div class="list-display">
@@ -47,6 +48,7 @@ import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import ptLocale from '@fullcalendar/core/locales/pt-br'
+import {apiService} from './../plugins/api'
 
 export default {
     name:'Calendar',
@@ -89,6 +91,15 @@ export default {
         return this.calendarOptions.height = 350
     },
     methods: {
+        testar() {
+            apiService.post('/user', {
+                name: 'Usuario1',
+                telegram_ID: 'ID_Tele',
+                email:'eduardo@not.com',
+                pass1:'Admin123!',
+                pass2:'Admin123!'
+            })
+        },
         unselect (){
             this.$emit('unselect')
             this.hasEventRegistered = false
