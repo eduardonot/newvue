@@ -3,7 +3,7 @@
         <div class="calendar">
             <FullCalendar ref="fullCalendar" :options="calendarOptions"/>
         </div>
-        <button @click="testar">aperte aqui para testar</button>
+        <!-- <button @click="testar">aperte aqui para testar</button> -->
         <div v-if="hasEventRegistered">
             <div class="task-list">
                 <div class="list-display">
@@ -78,7 +78,7 @@ export default {
         }
     },
     created(){
-        return this.calendarOptions.events = JSON.parse(localStorage.getItem('eventList'))
+       // return this.calendarOptions.events = JSON.parse(localStorage.getItem('eventList'))
     },
     mounted(){
         if (window.innerWidth > 767){
