@@ -102,7 +102,6 @@ export default {
         },
         unselect (){
             this.$emit('unselect')
-            this.$store.commit('changeRightPanelDisplay', false)
             this.hasEventRegistered = false
             
         },

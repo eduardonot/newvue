@@ -59,7 +59,7 @@ export default {
     name:'Dashboard',
     data() {
         return {
-            dateToString:'', 
+            dateToString: '', 
             addPanel: false, 
             editPanel: false, 
             addTaskBtn: false, 
@@ -108,6 +108,7 @@ export default {
                 this.$refs['right-panel'].style.display = 'flex'
                 this.$refs['transparentmodal'].style.display = 'flex'
             }
+            this.$store.commit('calendarClickedDate', date)
             this.dateToString = date, 
             this.addPanel = false
             this.editPanel = false
@@ -207,7 +208,15 @@ export default {
             this.initialTaskFieldToEdit.status = 'Concluído'
             // this.initialTaskFieldToEdit.color = '#69b1f4' 
             this.initialTaskFieldToEdit.color = '#29aa54'
-            this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
+            this.addPanel = false
+            this.editPanel = false
+            this.addTaskBtn = false
+            this.editTaskBtn = false
+            this.confirmAddTaskBtn = false
+            this.cancelBtn = false
+            this.delTaskBtn = false
+            this.showFinishTaskBtn = false
+            this.showConfirmEditBtn = false
         },
         markAsUnfinished: function (){
             if(window.innerWidth < 768){
@@ -217,7 +226,15 @@ export default {
             }
             this.initialTaskFieldToEdit.status = 'Não Concluído'
             this.initialTaskFieldToEdit.color = '#f45858'
-            this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
+            this.addPanel = false
+            this.editPanel = false
+            this.addTaskBtn = false
+            this.editTaskBtn = false
+            this.confirmAddTaskBtn = false
+            this.cancelBtn = false
+            this.delTaskBtn = false
+            this.showFinishTaskBtn = false
+            this.showConfirmEditBtn = false
         },
         unselectDate: function(){
             if(window.innerWidth < 768){
@@ -225,7 +242,15 @@ export default {
                 this.$refs['left-panel'].style.display = 'none'
                 this.$refs['transparentmodal'].style.display = 'none'
             }
-            this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
+            this.addPanel = false
+            this.editPanel = false
+            this.addTaskBtn = false
+            this.editTaskBtn = false
+            this.confirmAddTaskBtn = false
+            this.cancelBtn = false
+            this.delTaskBtn = false
+            this.showFinishTaskBtn = false
+            this.showConfirmEditBtn = false
         }
     },
     components:{
