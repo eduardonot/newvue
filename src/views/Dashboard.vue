@@ -108,16 +108,46 @@ export default {
                 this.$refs['right-panel'].style.display = 'flex'
                 this.$refs['transparentmodal'].style.display = 'flex'
             }
-            this.dateToString = date, this.addPanel = false, this.editPanel = false, this.addTaskBtn = true, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
+            this.dateToString = date, 
+            this.addPanel = false
+            this.editPanel = false
+            this.addTaskBtn = true
+            this.editTaskBtn = false
+            this.confirmAddTaskBtn = false
+            this.cancelBtn = false
+            this.delTaskBtn = false
+            this.showFinishTaskBtn = false
+            this.showConfirmEditBtn = false
         },
         clickedAddTask: function() {
-            this.addPanel = true, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.delTaskBtn = false
+            this.addPanel = true
+            this.editPanel = false
+            this.addTaskBtn = false
+            this.editTaskBtn = false
+            this.delTaskBtn = false
         },
         addTarefa: function(tarefa){
-            this.novaTarefaData = tarefa, this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
+            this.novaTarefaData = tarefa, 
+            this.addPanel = false
+            this.editPanel = false
+            this.addTaskBtn = false
+            this.editTaskBtn = false
+            this.confirmAddTaskBtn = false
+            this.cancelBtn = false
+            this.delTaskBtn = false
+            this.showFinishTaskBtn = false
+            this.showConfirmEditBtn = false
         },
         clickedConfirmAdd: function (){
-            this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
+            this.addPanel = false
+            this.editPanel = false
+            this.addTaskBtn = false
+            this.editTaskBtn = false
+            this.confirmAddTaskBtn = false
+            this.cancelBtn = false
+            this.delTaskBtn = false
+            this.showFinishTaskBtn = false 
+            this.showConfirmEditBtn = false
         },
         clickedEditTask: function() {
             
@@ -127,7 +157,12 @@ export default {
             if(this.initialTaskFieldToEdit.status !== 'Concluído'){
                 this.showConfirmEditBtn = false
             }
-            this.addPanel = false, this.editPanel = true, this.addTaskBtn = false, this.editTaskBtn = false, this.showEditTaskBtn = false, this.delTaskBtn = false
+            this.addPanel = false
+            this.editPanel = true
+            this.addTaskBtn = false
+            this.editTaskBtn = false
+            this.showEditTaskBtn = false
+            this.delTaskBtn = false
         },
         editTarefa: function(tarefa){
             if(this.$refs['right-panel'].style.display !== 'none'){

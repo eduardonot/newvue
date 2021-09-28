@@ -57,7 +57,7 @@ export default {
             hasEventRegistered: false,
             eventRegistered:[],
             calendarOptions: {
-                events:[],
+                events: this.$store.getters.getEvents,
                 locale: ptLocale,
                 selectable:false,
                 unselectAuto: true,
@@ -102,11 +102,12 @@ export default {
         },
         unselect (){
             this.$emit('unselect')
+            this.$store.commit('changeRightPanelDisplay', false)
             this.hasEventRegistered = false
             
         },
         dateClick (arg) {
-            let checkExists = this.calendarOptions.events.filter(x => x.start === arg.dateStr)
+            let checkExists = this.$store.state.events.filter(x => x.start === arg.dateStr)
             let getDay = arg.dateStr
             let splitDay = getDay.split('-') 
             let dd = splitDay[2]
@@ -139,6 +140,9 @@ export default {
                 return 0
             })
             return sortByHour
+        },
+        getEvents: function () {
+            return this.$store.state.events
         }
     },
     components:{
@@ -167,18 +171,6 @@ export default {
         newTask: {
             handler: function (data) {
                 if (data !== {} ){
-                    let getDay = data.data
-                    let splitDay = getDay.split('/')
-                    this.calendarOptions.events.push({
-                        title: data.titulo.trim(),
-                        hora:data.hora,
-                        status: 'Não Concluído',
-                        descricao: data.descricao.trim(),
-                        start:`${splitDay[2]}-${splitDay[1]}-${splitDay[0]}`,
-                        allDay: true,
-                        color:'#f45858'
-                    })
-                    localStorage.setItem('eventList', JSON.stringify(this.calendarOptions.events))
                     this.unselect()
                 }
             }

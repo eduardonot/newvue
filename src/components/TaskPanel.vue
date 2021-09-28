@@ -82,11 +82,21 @@ export default {
             let titulo = this.$refs['add-titulo'].value
             let hora = this.$refs['add-hora'].value
             let descricao = this.$refs['add-descricao'].value
+            let splitDay = data.split('/')
             if (data !== '' && titulo !== '' && hora !== ''){
-                this.$emit('novatarefa', {data, titulo, hora, descricao})
+                this.$store.commit('addEvent', {
+                    title: titulo,
+                    hora: hora,
+                    status: 'Não Concluído',
+                    descricao: descricao,
+                    start: `${splitDay[2]}-${splitDay[1]}-${splitDay[0]}`,
+                    allDay: true,
+                    color: '#f45858',
+                })
+                //  this.$emit('novatarefa', {data, titulo, hora, descricao})
                 return
             }
-            console.log('nao preenchido')
+            return
             },
         markAsFinished() {
             this.$emit('clickedMarkAsFinishedBtn')
