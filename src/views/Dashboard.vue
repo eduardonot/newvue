@@ -9,7 +9,7 @@
         <div ref="left-panel" class="s2 left-side-panel">
             <Panel/>
         </div>
-        <div v-if="this.showTransparentModal" ref="transparentmodal" @click="unselectDate" class="center-panel-screen"></div>
+        <div ref="transparentmodal" @click="unselectDate" class="center-panel-screen"></div>
             <div class="s6 center-panel">
                 <Calendar/>
         </div>

@@ -17,25 +17,19 @@
         <!-- DIV EDITAR SELECIONADO -->
         <div v-if="this.$store.state.panelStatus.editEventForm" class="task-panel">
             <h5 class="painel-caption">Título</h5>
-            <input v-model="this.$store.getters.getEventToEdit.title" class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="edit-titulo"/>
+            <input v-bind:value="getEventToEdit.title" class="form-input" maxlength="40" type="text" placeholder="TITULO"  @input="() => {}" ref="edit-titulo"/>
             <h5 class="painel-caption">Hora</h5>
-            <input v-model="this.$store.getters.getEventToEdit.hora" class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
+            <input v-bind:value="getEventToEdit.hora" class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
             <h5 class="painel-caption">Descrição</h5>
-            <input v-model="this.$store.getters.getEventToEdit.descricao" class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
+            <input v-bind:value="getEventToEdit.descricao"  class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
             <button @click="() => { confirmEditBtn() }" class="btn-azul">confirmar edição</button>
-            <button @click="() => { markAsFinished() }" class="btn-verde">Marcar como concluída</button>
-            <button @click="() => { markAsUnfinished() }" class="btn-rosa">Marcar como não concluída</button>
+            <button v-if="this.$store.getters.getEventToEdit.status == 'Não Concluído'" @click="() => { markAsFinished(this.$store.getters.getEventToEdit) }" class="btn-verde">Marcar como concluída</button>
+            <button v-if="this.$store.getters.getEventToEdit.status == 'Concluído'" @click="() => { markAsUnfinished(this.$store.getters.getEventToEdit) }" class="btn-rosa">Marcar como não concluída</button>
+            <button v-if="getEventToEdit.title" @click="() => { delTask() }" class="btn-rosa">excluir</button>
             <button @click="() => { cancel() }" class="btn-rosa">cancelar</button>  
         </div>
         
         <div class="task-panel">
-        <!-- BOTOES -->
-            <!-- <div>
-                <button @click="() => { addTask() }" class="btn-verde">adicionar novo</button>
-                <button @click="() => { cancel() }" class="btn-rosa">cancelar</button>
-                <button @click="() => { editTask() }" class="btn-azul">editar selecionado</button>
-                <button @click="() => { delTask() }" class="btn-rosa">excluir</button>
-            </div> -->
         </div>
 
         <!-- DELETE MODAL -->
@@ -53,22 +47,20 @@ export default {
     name:'TaskPanel',
     data() {
         return {
-            openDeleteModal:false,
+            openDeleteModal:false
         }
     },
     methods: {
         addTask(){
-            this.$emit('clickedAddTaskBtn')
-        },
-        editTask(){
-            this.$emit('clickedEditTaskBtn')
+            this.$store.commit('calendarClickedDate', this.getEventToEdit)
         },
         confirmEditBtn() {
+            const previousTaskData = this.$store.getters.getEventToEdit
             let title = this.$refs['edit-titulo'].value
             let hora = this.$refs['edit-hora'].value
-            let description = this.$refs['edit-descricao'].value
+            let descricao = this.$refs['edit-descricao'].value
             if( title !== '' && hora !== ''){
-                this.$emit('confirmEdit', {title, hora, description})
+                this.$store.commit('confirmEditEvent', {previousTaskData, title, hora, descricao})
             }
         },
         delTask(){
@@ -93,26 +85,29 @@ export default {
                     allDay: true,
                     color: '#f45858',
                 })
-                //  this.$emit('novatarefa', {data, titulo, hora, descricao})
                 return
             }
             return
             },
         markAsFinished() {
-            this.$emit('clickedMarkAsFinishedBtn')
+            this.$store.commit('markAsFinished', 'Concluído')
         },
         markAsUnfinished(){
-            this.$emit('clickedMarkAsUnninishedBtn')
+            this.$store.commit('markAsFinished', 'Não Concluído')
         },
         cancelDeleteBtn(){
             this.openDeleteModal = false
         },
         confirmDeleteBtn(){
             this.openDeleteModal = false
-            this.$emit('clickedConfirmDeleteBtn')
+            this.$store.commit('delEvent', this.getEventToEdit)
         },
     },
-
+    computed:{
+        getEventToEdit: function(){
+            return this.$store.getters.getEventToEdit
+        }
+    },
     components:{
         ConfirmDeleteModal
     },

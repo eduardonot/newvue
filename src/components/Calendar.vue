@@ -4,12 +4,12 @@
             <FullCalendar ref="fullCalendar" :options="calendarOptions"/>
         </div>
         <!-- <button @click="testar">aperte aqui para testar</button> -->
-        <div v-if="hasEventRegistered">
+        <div v-if="this.$store.getters.getEventRegistered">
             <div class="task-list">
                 <div class="list-display">
                     <h5>Horário</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.id" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getRegisteredEvent" :key="tarefas.id" >
                         {{ tarefas.hora }}
                     </li>
                     </ul>
@@ -17,7 +17,7 @@
                 <div class="list-display">
                     <h5>Título</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.id" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getRegisteredEvent" :key="tarefas.id" >
                         {{ tarefas.title}}
                     </li>
                     </ul>
@@ -25,7 +25,7 @@
                 <div class="list-display">
                     <h5>Status</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.id" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getRegisteredEvent" :key="tarefas.id" >
                         {{ tarefas.status}}
                     </li>
                     </ul>
@@ -33,7 +33,7 @@
                 <div class="list-display">
                     <h5>Descrição</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.newEventRegistered" :key="tarefas.id" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getRegisteredEvent" :key="tarefas.id" >
                         {{ tarefas.descricao}}
                     </li>
                     </ul>
@@ -55,7 +55,7 @@ export default {
     data() {
         return {
             hasEventRegistered: false,
-            eventRegistered:[],
+            eventRegistered: false,
             calendarOptions: {
                 events: this.$store.getters.getEvents,
                 locale: ptLocale,
@@ -77,9 +77,6 @@ export default {
             },
         }
     },
-    created(){
-       // return this.calendarOptions.events = JSON.parse(localStorage.getItem('eventList'))
-    },
     mounted(){
         if (window.innerWidth > 767){
             console.warn(`%cA largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`, 'color: white; font-weight:700; font-size:18px;')
@@ -100,25 +97,20 @@ export default {
                 pass2:'Admin123!'
             })
         },
-        unselect (){
-            this.$emit('unselect')
-            this.hasEventRegistered = false
-            
-        },
         dateClick (arg) {
             let checkExists = this.$store.state.events.filter(x => x.start === arg.dateStr)
             let getDay = arg.dateStr
-            let splitDay = getDay.split('-') 
+            let splitDay = getDay.split('-')
             let dd = splitDay[2]
             let mm = splitDay[1]
             let yyyy = splitDay[0]
             let dia = `${dd}/${mm}/${yyyy}`
             this.$store.commit('calendarClickedDate', dia)
             if (checkExists.length === 0) {
-                this.hasEventRegistered = false
+                this.$store.commit('changeEventRegistered', false)
                 return
             } else {
-                this.hasEventRegistered = true
+                this.$store.commit('changeEventRegistered', true)
                 this.eventRegistered = checkExists
             }
         },
@@ -127,7 +119,10 @@ export default {
         }
     },
     computed:{
-        newEventRegistered: function(){
+        getEventRegistered: function(){
+            return this.$store.getters.getRegisteredEvent
+        },
+        getRegisteredEvent: function(){
             let sortByHour = this.eventRegistered
             sortByHour.sort(function (a, b){
                 if (a.hora > b.hora){
@@ -148,11 +143,6 @@ export default {
         FullCalendar
     },
     props: {
-        newTask:{
-            type: Object,
-            required: true,
-            default: () => {}
-        },
         editConfirm:{
             type: Object,
         },
@@ -167,13 +157,6 @@ export default {
         }
     },
     watch:{
-        newTask: {
-            handler: function (data) {
-                if (data !== {} ){
-                    this.unselect()
-                }
-            }
-        },
         editConfirm: {
             handler: function (tarefa) {
                 if(tarefa) {
@@ -200,7 +183,6 @@ export default {
                     let getDay = this.calendarOptions.events.find(x => x == tarefa.getInitialTaskValues)
                     let taskIndex = this.calendarOptions.events.indexOf(getDay)
                     this.calendarOptions.events.splice(taskIndex, 1)
-                    this.unselect()
                 }
             }
         },
