@@ -7,46 +7,14 @@
             </div>
         </div>
         <div ref="left-panel" class="s2 left-side-panel">
-            <Panel
-                @submitSearch = "searchTask"
-            />
+            <Panel/>
         </div>
-        <div ref="transparentmodal" @click="unselectDate" class="center-panel-screen"></div>
+        <div v-if="this.showTransparentModal" ref="transparentmodal" @click="unselectDate" class="center-panel-screen"></div>
             <div class="s6 center-panel">
-                <Calendar 
-                @editarTarefa = "editTarefa" 
-                @clickedDate = "calendarClickedDate" 
-                @unselect = "unselectDate" 
-                :newTask = "novaTarefaData"
-                :editConfirm = "sendTaskFieldToEdit"
-                :deleteConfirm = "sendTaskFieldToDelete"
-                :searchTask = "fieldsToSearch"
-                />
+                <Calendar/>
         </div>
-        <div ref="right-panel" class="s2 right-side-panel">
-            <TaskPanel 
-            @novatarefa = "addTarefa" 
-            @confirmEdit = "confirmEditTask"
-            @clickedAddTaskBtn = "clickedAddTask"
-            @clickedEditTaskBtn = "clickedEditTask"
-            @clickedConfirmAddBtn = "clickedConfirmAdd"
-            @clickedCancelBtn = "unselectDate"
-            @clickedMarkAsFinishedBtn = "markAsFinished"
-            @clickedMarkAsUnninishedBtn = "markAsUnfinished"
-            @clickedConfirmDeleteBtn = "confirmDeleteTask"
-            :addTarefaPanel = "addPanel"
-            :editTarefaPanel = "editPanel"
-            :showAddTaskBtn = "addTaskBtn" 
-            :showEditTaskBtn = "editTaskBtn" 
-            :showConfirmAddTaskBtn = "confirmAddTaskBtn"
-            :showCancelBtn = "cancelBtn"
-            :showDelTaskBtn = "delTaskBtn"
-            :showConfirmEditBtn = "showConfirmEditBtn"
-            :showFinishTaskBtn = "showConfirmEditBtn"
-            :showUnfinishTaskBtn = "showUnfinishTaskBtn"
-            :inputDateStringField = "dateToString"
-            :initialTaskFieldToEdit = "fieldsToEdit"
-            />
+        <div  v-if="this.$store.state.panelStatus.addTarefaPanel"  ref="right-panel" class="s2 right-side-panel">
+            <TaskPanel />
         </div>
     </div>
 </template>
@@ -99,7 +67,7 @@ export default {
                 this.$refs['transparentmodal'].style.display = 'flex'
             }
         },
-        calendarClickedDate: function(date) {
+        calendarClickedDate: function() {
             if(this.$refs['right-panel'].style.display !== 'none'){
                 this.$refs['right-panel'].style.display = 'flex'
                 this.$refs['transparentmodal'].style.display = 'flex'
@@ -108,47 +76,16 @@ export default {
                 this.$refs['right-panel'].style.display = 'flex'
                 this.$refs['transparentmodal'].style.display = 'flex'
             }
-            this.$store.commit('calendarClickedDate', date)
-            this.dateToString = date, 
-            this.addPanel = false
-            this.editPanel = false
-            this.addTaskBtn = true
-            this.editTaskBtn = false
-            this.confirmAddTaskBtn = false
-            this.cancelBtn = false
-            this.delTaskBtn = false
-            this.showFinishTaskBtn = false
-            this.showConfirmEditBtn = false
+            
         },
         clickedAddTask: function() {
-            this.addPanel = true
-            this.editPanel = false
-            this.addTaskBtn = false
-            this.editTaskBtn = false
-            this.delTaskBtn = false
+            
         },
-        addTarefa: function(tarefa){
-            this.novaTarefaData = tarefa, 
-            this.addPanel = false
-            this.editPanel = false
-            this.addTaskBtn = false
-            this.editTaskBtn = false
-            this.confirmAddTaskBtn = false
-            this.cancelBtn = false
-            this.delTaskBtn = false
-            this.showFinishTaskBtn = false
-            this.showConfirmEditBtn = false
+        addTarefa: function(){
+
         },
         clickedConfirmAdd: function (){
-            this.addPanel = false
-            this.editPanel = false
-            this.addTaskBtn = false
-            this.editTaskBtn = false
-            this.confirmAddTaskBtn = false
-            this.cancelBtn = false
-            this.delTaskBtn = false
-            this.showFinishTaskBtn = false 
-            this.showConfirmEditBtn = false
+            
         },
         clickedEditTask: function() {
             
@@ -158,12 +95,6 @@ export default {
             if(this.initialTaskFieldToEdit.status !== 'Concluído'){
                 this.showConfirmEditBtn = false
             }
-            this.addPanel = false
-            this.editPanel = true
-            this.addTaskBtn = false
-            this.editTaskBtn = false
-            this.showEditTaskBtn = false
-            this.delTaskBtn = false
         },
         editTarefa: function(tarefa){
             if(this.$refs['right-panel'].style.display !== 'none'){
@@ -174,7 +105,6 @@ export default {
                 this.$refs['right-panel'].style.display = 'flex'
                 this.$refs['transparentmodal'].style.display = 'flex'
             }
-            this.addPanel = false,  this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = true, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = true, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false, 
             this.initialTaskFieldToEdit = tarefa
             this.fieldsToEdit = tarefa
         },
@@ -184,7 +114,6 @@ export default {
                 this.$refs['left-panel'].style.display = 'none'
                 this.$refs['transparentmodal'].style.display = 'none'
             }
-            this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
             let getInitialTaskValues = this.initialTaskFieldToEdit
             this.sendTaskFieldToEdit = {getInitialTaskValues, tarefas}
         },
@@ -197,8 +126,7 @@ export default {
             let getInitialTaskValues = this.initialTaskFieldToEdit
             getInitialTaskValues.delete = true
             this.sendTaskFieldToDelete = {getInitialTaskValues}
-            this.addPanel = false, this.editPanel = false, this.addTaskBtn = false, this.editTaskBtn = false, this.confirmAddTaskBtn = false, this.cancelBtn = false, this.delTaskBtn = false, this.showFinishTaskBtn = false, this.showConfirmEditBtn = false
-        },
+            },
         markAsFinished: function (){
             if(window.innerWidth < 768){
                 this.$refs['right-panel'].style.display = 'none'
@@ -206,17 +134,8 @@ export default {
                 this.$refs['transparentmodal'].style.display = 'none'
             }
             this.initialTaskFieldToEdit.status = 'Concluído'
-            // this.initialTaskFieldToEdit.color = '#69b1f4' 
             this.initialTaskFieldToEdit.color = '#29aa54'
-            this.addPanel = false
-            this.editPanel = false
-            this.addTaskBtn = false
-            this.editTaskBtn = false
-            this.confirmAddTaskBtn = false
-            this.cancelBtn = false
-            this.delTaskBtn = false
-            this.showFinishTaskBtn = false
-            this.showConfirmEditBtn = false
+            
         },
         markAsUnfinished: function (){
             if(window.innerWidth < 768){
@@ -226,15 +145,7 @@ export default {
             }
             this.initialTaskFieldToEdit.status = 'Não Concluído'
             this.initialTaskFieldToEdit.color = '#f45858'
-            this.addPanel = false
-            this.editPanel = false
-            this.addTaskBtn = false
-            this.editTaskBtn = false
-            this.confirmAddTaskBtn = false
-            this.cancelBtn = false
-            this.delTaskBtn = false
-            this.showFinishTaskBtn = false
-            this.showConfirmEditBtn = false
+            
         },
         unselectDate: function(){
             if(window.innerWidth < 768){
@@ -242,15 +153,6 @@ export default {
                 this.$refs['left-panel'].style.display = 'none'
                 this.$refs['transparentmodal'].style.display = 'none'
             }
-            this.addPanel = false
-            this.editPanel = false
-            this.addTaskBtn = false
-            this.editTaskBtn = false
-            this.confirmAddTaskBtn = false
-            this.cancelBtn = false
-            this.delTaskBtn = false
-            this.showFinishTaskBtn = false
-            this.showConfirmEditBtn = false
         }
     },
     components:{
@@ -265,7 +167,7 @@ export default {
         height:100%;
         display:flex;
         flex-direction:row;
-        justify-content: center;
+        justify-content: flex-start;
     }
     .btn-azul{
         padding: 10px;

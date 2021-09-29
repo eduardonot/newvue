@@ -113,7 +113,7 @@ export default {
             let mm = splitDay[1]
             let yyyy = splitDay[0]
             let dia = `${dd}/${mm}/${yyyy}`
-            this.$emit('clickedDate', dia)
+            this.$store.commit('calendarClickedDate', dia)
             if (checkExists.length === 0) {
                 this.hasEventRegistered = false
                 return
@@ -123,7 +123,7 @@ export default {
             }
         },
         editSelectedTask: function(tarefa){
-            this.$emit('editarTarefa', tarefa)
+            this.$store.commit('editEvent', tarefa)
         }
     },
     computed:{

@@ -1,9 +1,9 @@
 <template>
     <div class="task-panel-container">
         <!-- DIV ADICIONAR NOVO -->
-        <div class="task-panel" v-if="addTarefaPanel">
+        <div v-if="this.$store.state.panelStatus.addEventForm" class="task-panel">
             <h5 class="painel-caption">Data</h5>
-            <input v-model="inputDateStringField" class="form-input" type="text" disabled ref="add-data"/>
+            <input v-model="this.$store.getters.getClickedDate" class="form-input" type="text" disabled ref="add-data"/>
             <h5 class="painel-caption">Título</h5>
             <input class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="add-titulo"/>
             <h5 class="painel-caption">Hora</h5>
@@ -15,27 +15,27 @@
         </div>
 
         <!-- DIV EDITAR SELECIONADO -->
-        <div class="task-panel" v-if="editTarefaPanel">
+        <div v-if="this.$store.state.panelStatus.editEventForm" class="task-panel">
             <h5 class="painel-caption">Título</h5>
-            <input v-model="getTitleToEdit" class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="edit-titulo"/>
+            <input v-model="this.$store.getters.getEventToEdit.title" class="form-input" maxlength="40" type="text" placeholder="TITULO" ref="edit-titulo"/>
             <h5 class="painel-caption">Hora</h5>
-            <input v-model="getHoraToEdit" class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
+            <input v-model="this.$store.getters.getEventToEdit.hora" class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
             <h5 class="painel-caption">Descrição</h5>
-            <input v-model="getDescricaoToEdit" class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
+            <input v-model="this.$store.getters.getEventToEdit.descricao" class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
             <button @click="() => { confirmEditBtn() }" class="btn-azul">confirmar edição</button>
-            <button v-if="!showFinishTaskBtn" @click="() => { markAsFinished() }" class="btn-verde">Marcar como concluída</button>
-            <button v-if="showFinishTaskBtn" @click="() => { markAsUnfinished() }" class="btn-rosa">Marcar como não concluída</button>
+            <button @click="() => { markAsFinished() }" class="btn-verde">Marcar como concluída</button>
+            <button @click="() => { markAsUnfinished() }" class="btn-rosa">Marcar como não concluída</button>
             <button @click="() => { cancel() }" class="btn-rosa">cancelar</button>  
         </div>
         
         <div class="task-panel">
         <!-- BOTOES -->
-            <div>
-                <button v-if="showAddTaskBtn" @click="() => { addTask() }" class="btn-verde">adicionar novo</button>
-                <button v-if="showAddTaskBtn" @click="() => { cancel() }" class="btn-rosa">cancelar</button>
-                <button v-if="showEditTaskBtn" @click="() => { editTask() }" class="btn-azul">editar selecionado</button>
-                <button v-if="showDelTaskBtn" @click="() => { delTask() }" class="btn-rosa">excluir</button>
-            </div>
+            <!-- <div>
+                <button @click="() => { addTask() }" class="btn-verde">adicionar novo</button>
+                <button @click="() => { cancel() }" class="btn-rosa">cancelar</button>
+                <button @click="() => { editTask() }" class="btn-azul">editar selecionado</button>
+                <button @click="() => { delTask() }" class="btn-rosa">excluir</button>
+            </div> -->
         </div>
 
         <!-- DELETE MODAL -->
@@ -75,7 +75,7 @@ export default {
             this.openDeleteModal = true
         },
         cancel(){
-            this.$emit('clickedCancelBtn')
+            this.$store.commit('cancel')
         },
         confirmAdd(){
             let data = this.$refs['add-data'].value
@@ -115,83 +115,6 @@ export default {
 
     components:{
         ConfirmDeleteModal
-        },
-
-    computed:{
-        getTitleToEdit:{
-            get (){
-                return this.initialTaskFieldToEdit.title
-            },
-            set(){
-                this.initialTaskFieldToEdit.title
-            }
-        },
-        getHoraToEdit:{
-            get (){
-                return this.initialTaskFieldToEdit.hora
-            },
-            set(){
-                this.initialTaskFieldToEdit.hora
-            }
-        },
-        getDescricaoToEdit:{
-            get (){
-                return this.initialTaskFieldToEdit.descricao
-            },
-            set(){
-                this.initialTaskFieldToEdit.descricao
-            }
-        }
-    },
-
-    props:{
-        initialTaskFieldToEdit:{
-            type: Object
-        },
-        inputDateStringField:{
-            type: String,
-            default: ''
-        },
-        addTarefaPanel:{
-            type: Boolean,
-            default: false
-        },
-        editTarefaPanel:{
-            type: Boolean,
-            default: false
-        },
-        showAddTaskBtn:{
-            type: Boolean,
-            default: false
-        },
-        showEditTaskBtn:{
-            type: Boolean,
-            default: false
-        },
-        showConfirmAddTaskBtn:{
-            type: Boolean,
-            default: false
-        },
-        showCancelBtn:{
-            type: Boolean,
-            default: false
-        },
-        showDelTaskBtn:{
-            type: Boolean,
-            default: false
-        },
-        showConfirmEditBtn:{
-            type: Boolean,
-            default: false
-        },
-        showFinishTaskBtn:{
-            type: Boolean,
-            default: false  
-        },
-        showUnfinishTaskBtn:{
-            type: Boolean,
-            default: false  
-        },
     },
 
 }

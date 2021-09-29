@@ -6,63 +6,36 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         events:[],
+        eventToEdit: {},
         panelStatus:{
-            // DASHBOARD
-            dateToString:'', 
-            addPanel: false, 
-            editPanel: false, 
-            addTaskBtn: false, 
-            editTaskBtn: false, 
-            confirmAddTaskBtn: false, 
-            cancelBtn: false, 
-            delTaskBtn: false, 
-            novaTarefaData: {},
-            sendTaskFieldToEdit: {},
-            sendTaskFieldToDelete: {},
-            fieldsToEdit:{},
-            fieldsToSearch:{},
-
-            // TASK PANEL
-            initialTaskFieldToEdit: {},
             inputDateStringField : '',
             addTarefaPanel: false,
-            editTarefaPanel: false,
-            showAddTaskBtn: false,
-            showEditTaskBtn: false,
-            showConfirmAddTaskBtn: false,
-            showCancelBtn: false,
-            showDelTaskBtn: false,
-            showConfirmEditBtn: false,
-            showFinishTaskBtn: false,
-            showUnfinishTaskBtn: false,
-
-            // CALENDAR
-            newTask: {},
-            editConfirm: {},
-            deleteConfirm: {},
-            changeStatus: '',
-            searchTask: {},
+            addEventForm: false,
+            editEventForm: false,
         }
     },
     mutations: {
         addEvent(state, payload){
             state.events.push(payload)
-        },
-        unselect(state){
             state.panelStatus.addTarefaPanel = false
-            state.panelStatus.editTarefaPanel =  false
-            state.panelStatus.showAddTaskBtn =  false
-            state.panelStatus.showEditTaskBtn =  false
-            state.panelStatus.showConfirmAddTaskBtn =  false
-            state.panelStatus.showCancelBtn =  false
-            state.panelStatus.showDelTaskBtn =  false
-            state.panelStatus.showConfirmEditBtn =  false
-            state.panelStatus.showFinishTaskBtn =  false
+            
+        },
+        editEvent(state, payload){
+            state.eventToEdit = payload
+            state.panelStatus.addTarefaPanel =  true
+            state.panelStatus.addEventForm = false
+            state.panelStatus.editEventForm = true
         },
         calendarClickedDate(state, payload){
-            this.unselect
-            state.panelStatus.dateToString = payload
-            state.panelStatus.addTaskBtn =  true
+            state.panelStatus.inputDateStringField = payload
+            state.panelStatus.addTarefaPanel =  true
+            state.panelStatus.addEventForm = true
+            state.panelStatus.editEventForm = false
+        },
+        cancel(state){
+            state.panelStatus.addTarefaPanel = false
+            state.panelStatus.addEventForm = false
+            state.panelStatus.editEventForm = false
         }
     },
     actions: {
@@ -73,6 +46,13 @@ export default new Vuex.Store({
         },
         getPanelStatus(state){
             return state.panelStatus
+        },
+        getClickedDate(state){
+            return state.panelStatus.inputDateStringField
+        },
+        getEventToEdit(state){
+            return state.eventToEdit
         }
-    }
+    },
+    modules: {}
 })
