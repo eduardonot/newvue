@@ -44,10 +44,14 @@ export default new Vuex.Store({
             state.events[getIndex].descricao = payload.descricao
         },
         markAsFinished(state, payload){
-            state.eventToEdit.status = payload
+            const taskIndex = state.events.indexOf(payload)
+            state.events[taskIndex].color = '#29aa54'
+            state.events[taskIndex].status = 'Concluído'
         },
         markAsUnfinished(state, payload){
-            state.eventToEdit.status = payload
+            const taskIndex = state.events.indexOf(payload)
+            state.events[taskIndex].color = '#f45858'
+            state.events[taskIndex].status = 'Não Concluído'
         },
         calendarClickedDate(state, payload){
             state.eventToEdit = {payload}

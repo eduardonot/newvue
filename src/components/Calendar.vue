@@ -52,12 +52,15 @@ import {apiService} from './../plugins/api'
 
 export default {
     name:'Calendar',
+    components:{
+        FullCalendar
+    },
     data() {
         return {
             hasEventRegistered: false,
             eventRegistered: false,
             calendarOptions: {
-                events: this.$store.getters.getEvents,
+                events: [],
                 locale: ptLocale,
                 selectable:false,
                 unselectAuto: true,
@@ -86,6 +89,49 @@ export default {
         console.warn(`%cA largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`, 'color: white; font-weight:700; font-size:18px;')
         console.warn(`%cCaso queira, reajuste a dimensão de exibição e pressione F5 para recarregar a página.`, 'color: white; font-weight:700; font-size:16px;')   
         return this.calendarOptions.height = 350
+    },
+    computed:{
+        getEventRegistered: function(){
+            return this.$store.getters.getRegisteredEvent
+        },
+        getRegisteredEvent: function(){
+            let sortByHour = this.eventRegistered
+            sortByHour.sort(function (a, b){
+                if (a.hora > b.hora){
+                    return 1
+                }
+                if (b.hora > a.hora){
+                    return -1
+                }
+                return 0
+            })
+            return sortByHour
+        },
+        getEvents: function () {
+            return this.$store.getters.getEvents
+        }
+    },
+    watch:{
+        "getEvents": function() {
+            this.calendarOptions.events = this.getEvents
+        },
+        searchTask: {
+            handler: async function(criteria){
+                if(criteria){
+                    let searchTitle = await this.calendarOptions.events.filter(task => task.title.toLowerCase().includes(criteria.title))
+                    let getSearchTitleStatus = await searchTitle.filter(search => search.status == criteria.status)
+                    let getDate = await getSearchTitleStatus.find(date => date.start >= criteria.initialDate && date.start <= criteria.finalDate)
+                    if (!getDate){
+                        return alert('Não foi possível encontrar tarefa com os dados informados.')
+                    }
+                    let calendarApi = this.$refs.fullCalendar.getApi()
+                    calendarApi.gotoDate(getDate.start)
+                    calendarApi.select(getDate.start)
+                }
+                return
+            }
+            
+        }
     },
     methods: {
         testar() {
@@ -118,30 +164,6 @@ export default {
             this.$store.commit('editEvent', tarefa)
         }
     },
-    computed:{
-        getEventRegistered: function(){
-            return this.$store.getters.getRegisteredEvent
-        },
-        getRegisteredEvent: function(){
-            let sortByHour = this.eventRegistered
-            sortByHour.sort(function (a, b){
-                if (a.hora > b.hora){
-                    return 1
-                }
-                if (b.hora > a.hora){
-                    return -1
-                }
-                return 0
-            })
-            return sortByHour
-        },
-        getEvents: function () {
-            return this.$store.state.events
-        }
-    },
-    components:{
-        FullCalendar
-    },
     props: {
         editConfirm:{
             type: Object,
@@ -156,54 +178,6 @@ export default {
             type: Object
         }
     },
-    watch:{
-        editConfirm: {
-            handler: function (tarefa) {
-                if(tarefa) {
-                    let getDay = this.calendarOptions.events.find(x => x == tarefa.getInitialTaskValues)
-                    getDay.title = tarefa.tarefas.title
-                    getDay.hora = tarefa.tarefas.hora
-                    getDay.descricao = tarefa.tarefas.description
-                    
-                }
-            }
-        },
-        changeStatus: {
-            handler: function (tarefa) {
-                if(tarefa) {
-                    let getDay = this.calendarOptions.events.find(x => x == tarefa.getInitialTaskValues)
-                    getDay.status = tarefa.tarefas.status
-                    
-                }
-            }
-        },
-        deleteConfirm: {
-            handler: function (tarefa) {
-                if(tarefa) {
-                    let getDay = this.calendarOptions.events.find(x => x == tarefa.getInitialTaskValues)
-                    let taskIndex = this.calendarOptions.events.indexOf(getDay)
-                    this.calendarOptions.events.splice(taskIndex, 1)
-                }
-            }
-        },
-        searchTask: {
-            handler: async function(criteria){
-                if(criteria){
-                    let searchTitle = await this.calendarOptions.events.filter(task => task.title.toLowerCase().includes(criteria.title))
-                    let getSearchTitleStatus = await searchTitle.filter(search => search.status == criteria.status)
-                    let getDate = await getSearchTitleStatus.find(date => date.start >= criteria.initialDate && date.start <= criteria.finalDate)
-                    if (!getDate){
-                        return alert('Não foi possível encontrar tarefa com os dados informados.')
-                    }
-                    let calendarApi = this.$refs.fullCalendar.getApi()
-                    calendarApi.gotoDate(getDate.start)
-                    calendarApi.select(getDate.start)
-                }
-                return
-            }
-            
-        }
-    }
 }
 </script>
 <style>

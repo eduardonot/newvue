@@ -17,11 +17,11 @@
         <!-- DIV EDITAR SELECIONADO -->
         <div v-if="this.$store.state.panelStatus.editEventForm" class="task-panel">
             <h5 class="painel-caption">Título</h5>
-            <input v-bind:value="getEventToEdit.title" class="form-input" maxlength="40" type="text" placeholder="TITULO"  @input="() => {}" ref="edit-titulo"/>
+            <input v-model="editEvent.title" class="form-input" maxlength="40" type="text" placeholder="TITULO"  @input="() => {}" ref="edit-titulo"/>
             <h5 class="painel-caption">Hora</h5>
-            <input v-bind:value="getEventToEdit.hora" class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
+            <input v-model="editEvent.hora" class="form-input" type="time" placeholder="HORA" ref="edit-hora"/>
             <h5 class="painel-caption">Descrição</h5>
-            <input v-bind:value="getEventToEdit.descricao"  class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
+            <input v-model="editEvent.descricao"  class="form-input" maxlength="120" type="text" placeholder="DESCRIÇÃO" ref="edit-descricao"/>
             <button @click="() => { confirmEditBtn() }" class="btn-azul">confirmar edição</button>
             <button v-if="this.$store.getters.getEventToEdit.status == 'Não Concluído'" @click="() => { markAsFinished(this.$store.getters.getEventToEdit) }" class="btn-verde">Marcar como concluída</button>
             <button v-if="this.$store.getters.getEventToEdit.status == 'Concluído'" @click="() => { markAsUnfinished(this.$store.getters.getEventToEdit) }" class="btn-rosa">Marcar como não concluída</button>
@@ -45,9 +45,23 @@
 import ConfirmDeleteModal from './ConfirmDeleteModal.vue'
 export default {
     name:'TaskPanel',
+    components:{
+        ConfirmDeleteModal
+    },
     data() {
         return {
+            editEvent: {title: '', hora: '', descricao: ''},
             openDeleteModal:false
+        }
+    },
+    computed:{
+        getEventToEdit: function(){
+            return this.$store.getters.getEventToEdit
+        }
+    },
+    watch:{
+        "getEventToEdit" : function(){
+            this.editEvent = Object.assign(this.editEvent, this.getEventToEdit)
         }
     },
     methods: {
@@ -90,10 +104,10 @@ export default {
             return
             },
         markAsFinished() {
-            this.$store.commit('markAsFinished', 'Concluído')
+            this.$store.commit('markAsFinished', this.getEventToEdit)
         },
         markAsUnfinished(){
-            this.$store.commit('markAsFinished', 'Não Concluído')
+            this.$store.commit('markAsUnfinished', this.getEventToEdit)
         },
         cancelDeleteBtn(){
             this.openDeleteModal = false
@@ -102,14 +116,6 @@ export default {
             this.openDeleteModal = false
             this.$store.commit('delEvent', this.getEventToEdit)
         },
-    },
-    computed:{
-        getEventToEdit: function(){
-            return this.$store.getters.getEventToEdit
-        }
-    },
-    components:{
-        ConfirmDeleteModal
     },
 
 }
