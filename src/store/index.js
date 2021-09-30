@@ -11,6 +11,7 @@ export default new Vuex.Store({
         panelStatus:{
             inputDateStringField : '',
             addTarefaPanel: false,
+            userPanel: false,
             addEventForm: false,
             editEventForm: false,
         }

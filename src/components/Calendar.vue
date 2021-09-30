@@ -164,20 +164,6 @@ export default {
             this.$store.commit('editEvent', tarefa)
         }
     },
-    props: {
-        editConfirm:{
-            type: Object,
-        },
-        deleteConfirm:{
-            type: Object
-        },
-        changeStatus:{
-            type: String,
-        },
-        searchTask:{
-            type: Object
-        }
-    },
 }
 </script>
 <style>

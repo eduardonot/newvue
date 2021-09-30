@@ -1,7 +1,7 @@
 <template>
     <div class="dashboard-container">
         <div class="header-title">
-            <button @click="showuserpanel"><span class="material-icons">list</span></button>
+            <button ><span class="material-icons">list</span></button>
             <div class="panel-logo">
                 <img src="./../../public/icons/stanley-icon.png"/>
             </div>
@@ -9,11 +9,11 @@
         <div ref="left-panel" class="s2 left-side-panel">
             <Panel/>
         </div>
-        <div ref="transparentmodal" @click="unselectDate" class="center-panel-screen"></div>
+        <div v-if="transparentBackground" @click="this.cancel" ref="transparentmodal" class="center-panel-screen"></div>
             <div class="s6 center-panel">
                 <Calendar/>
         </div>
-        <div  v-if="this.$store.state.panelStatus.addTarefaPanel"  ref="right-panel" class="s2 right-side-panel">
+        <div v-if="this.getTaskPanelStatus" ref="right-panel" class="s2 right-side-panel">
             <TaskPanel />
         </div>
     </div>
@@ -27,136 +27,35 @@ export default {
     name:'Dashboard',
     data() {
         return {
-            dateToString: '', 
-            addPanel: false, 
-            editPanel: false, 
-            addTaskBtn: false, 
-            editTaskBtn: false, 
-            confirmAddTaskBtn: false, 
-            cancelBtn: false, 
-            delTaskBtn: false, 
-            showFinishTaskBtn: false, 
-            showUnfinishTaskBtn:false, 
-            showConfirmEditBtn: false, 
-            novaTarefaData: {},
-            initialTaskFieldToEdit: {}, 
-            sendTaskFieldToEdit: {},
-            sendTaskFieldToDelete: {},
-            fieldsToEdit:{},
-            fieldsToSearch:{}
+            getTaskPanelStatus:false,
+            getUserPanelStatus:false,
+            transparentBackground: false
         }
     },
     mounted(){
-        if (window.innerWidth < 768){
-            this.$refs['left-panel'].style.display = 'none'
-            this.$refs['right-panel'].style.display = 'none'
-            this.$refs['transparentmodal'].style.display = 'none'
+    },
+    computed:{
+        getPanelStatus: function(){
+            return this.$store.getters.getPanelStatus.addTarefaPanel
         }
     },
-    methods: {
-        searchTask: async function (criteria){
-            this.fieldsToSearch = await criteria
-        },
-        showuserpanel: function(){
-            if(this.$refs['left-panel'].style.display !== 'none'){
-                this.$refs['left-panel'].style.display = 'flex'
-                this.$refs['transparentmodal'].style.display = 'flex'
-            }
-            if(this.$refs['left-panel'].style.display == 'none'){
-                this.$refs['left-panel'].style.display = 'flex'
-                this.$refs['transparentmodal'].style.display = 'flex'
-            }
-        },
-        calendarClickedDate: function() {
-            if(this.$refs['right-panel'].style.display !== 'none'){
-                this.$refs['right-panel'].style.display = 'flex'
-                this.$refs['transparentmodal'].style.display = 'flex'
-            }
-            if(this.$refs['right-panel'].style.display == 'none'){
-                this.$refs['right-panel'].style.display = 'flex'
-                this.$refs['transparentmodal'].style.display = 'flex'
-            }
-            
-        },
-        clickedAddTask: function() {
-            
-        },
-        addTarefa: function(){
-
-        },
-        clickedConfirmAdd: function (){
-            
-        },
-        clickedEditTask: function() {
-            
-            if(this.initialTaskFieldToEdit.status == 'Concluído'){
-                this.showConfirmEditBtn = true
-            }
-            if(this.initialTaskFieldToEdit.status !== 'Concluído'){
-                this.showConfirmEditBtn = false
-            }
-        },
-        editTarefa: function(tarefa){
-            if(this.$refs['right-panel'].style.display !== 'none'){
-                this.$refs['right-panel'].style.display = 'flex'
-                this.$refs['transparentmodal'].style.display = 'flex'
-            }
-            if(this.$refs['right-panel'].style.display == 'none'){
-                this.$refs['right-panel'].style.display = 'flex'
-                this.$refs['transparentmodal'].style.display = 'flex'
-            }
-            this.initialTaskFieldToEdit = tarefa
-            this.fieldsToEdit = tarefa
-        },
-        confirmEditTask: function (tarefas) {
-            if(window.innerWidth < 768){
-                this.$refs['right-panel'].style.display = 'none'
-                this.$refs['left-panel'].style.display = 'none'
-                this.$refs['transparentmodal'].style.display = 'none'
-            }
-            let getInitialTaskValues = this.initialTaskFieldToEdit
-            this.sendTaskFieldToEdit = {getInitialTaskValues, tarefas}
-        },
-        confirmDeleteTask: function() {
-            if(window.innerWidth < 768){
-                this.$refs['right-panel'].style.display = 'none'
-                this.$refs['left-panel'].style.display = 'none'
-                this.$refs['transparentmodal'].style.display = 'none'
-            }
-            let getInitialTaskValues = this.initialTaskFieldToEdit
-            getInitialTaskValues.delete = true
-            this.sendTaskFieldToDelete = {getInitialTaskValues}
-            },
-        markAsFinished: function (){
-            if(window.innerWidth < 768){
-                this.$refs['right-panel'].style.display = 'none'
-                this.$refs['left-panel'].style.display = 'none'
-                this.$refs['transparentmodal'].style.display = 'none'
-            }
-            this.initialTaskFieldToEdit.status = 'Concluído'
-            this.initialTaskFieldToEdit.color = '#29aa54'
-            
-        },
-        markAsUnfinished: function (){
-            if(window.innerWidth < 768){
-                this.$refs['right-panel'].style.display = 'none'
-                this.$refs['left-panel'].style.display = 'none'
-                this.$refs['transparentmodal'].style.display = 'none'
-            }
-            this.initialTaskFieldToEdit.status = 'Não Concluído'
-            this.initialTaskFieldToEdit.color = '#f45858'
-            
-        },
-        unselectDate: function(){
-            if(window.innerWidth < 768){
-                this.$refs['right-panel'].style.display = 'none'
-                this.$refs['left-panel'].style.display = 'none'
-                this.$refs['transparentmodal'].style.display = 'none'
-            }
+    watch: {
+        "getPanelStatus": function(){
+            this.getTaskPanelStatus = this.getPanelStatus
+            this.transparentBackground = this.getPanelStatus
         }
     },
     components:{
         Calendar, Panel, TaskPanel
+    },
+    
+    methods: {
+        searchTask: async function (criteria){
+            this.fieldsToSearch = await criteria
+        },
+        cancel: function(){
+            this.$store.commit('cancel')
+        }
     },
 }
 
@@ -247,7 +146,6 @@ export default {
             align-items: center;
         }
         .center-panel-screen{
-            display:none;
             position:fixed;
             right:0;
             height:100%;
@@ -272,7 +170,6 @@ export default {
             width:100% !important;
         }
         .right-side-panel{
-            display:none;
             position:absolute;
             right:0;
             height:100%;

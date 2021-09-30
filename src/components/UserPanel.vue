@@ -109,7 +109,7 @@ export default {
             if(new Date(this.searchCriteria.initialDate) > new Date(this.searchCriteria.finalDate)){
                 return alert('ATENÇÃO\n\n Intervalo entre Data Inicial e Final não é válido. Favor corrigir.')
             }
-            this.$emit('submitSearch', this.searchCriteria)
+            // this.$emit('submitSearch', this.searchCriteria)
         }
     },
     
