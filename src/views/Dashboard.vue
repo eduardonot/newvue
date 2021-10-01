@@ -7,11 +7,15 @@
             </div>
         </div>
         <div ref="left-panel" class="s2 left-side-panel">
-            <Panel/>
+            <Panel
+                @submitSearch = "searchTask"
+            />
         </div>
         <div v-if="transparentBackground" @click="this.cancel" ref="transparentmodal" class="center-panel-screen"></div>
             <div class="s6 center-panel">
-                <Calendar/>
+                <Calendar
+                    :searchTask = "fieldsToSearch"
+                />
         </div>
         <div v-if="getTaskPanelStatus" ref="right-panel" class="s2 right-side-panel">
             <TaskPanel />
@@ -31,6 +35,7 @@ export default {
             getUserPanelStatus:false,
             transparentBackground: false,
             userPanel: false,
+            fieldsToSearch: {}
         }
     },
     mounted(){
@@ -51,8 +56,13 @@ export default {
     },
     
     methods: {
-        searchTask: async function (criteria){
-            this.fieldsToSearch = await criteria
+        searchTask: function (criteria){
+            this.fieldsToSearch = criteria
+            if(this.$refs['left-panel'].style.display == 'flex'){
+                this.$refs['left-panel'].style.display = 'none'
+                this.transparentBackground = false
+            }
+            this.$store.commit('cancel')
         },
         openUserPanel: function(){
             if(this.$refs['left-panel'].style.display != 'flex'){

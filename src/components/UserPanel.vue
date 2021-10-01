@@ -83,6 +83,9 @@ export default {
         }
     },
     methods:{
+        closeAll(){
+            this.search=0, this.settings=0, this.question=0, this.info=0 
+        },
         showSearch() {
             this.search=1, this.settings=0, this.question=0, this.info=0 
         },
@@ -109,7 +112,9 @@ export default {
             if(new Date(this.searchCriteria.initialDate) > new Date(this.searchCriteria.finalDate)){
                 return alert('ATENÇÃO\n\n Intervalo entre Data Inicial e Final não é válido. Favor corrigir.')
             }
-            // this.$emit('submitSearch', this.searchCriteria)
+            this.closeAll()
+            // this.$store.commit('searchTask', this.searchCriteria)
+            this.$emit('submitSearch', this.searchCriteria)
         }
     },
     

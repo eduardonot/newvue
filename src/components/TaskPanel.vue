@@ -62,6 +62,9 @@ export default {
     watch:{
         "getEventToEdit" : function(){
             this.editEvent = Object.assign(this.editEvent, this.getEventToEdit)
+        },
+        getEventToAdd: function(data){
+            console.log(data)
         }
     },
     methods: {

@@ -4,7 +4,7 @@
             <FullCalendar ref="fullCalendar" :options="calendarOptions"/>
         </div>
         <!-- <button @click="testar">aperte aqui para testar</button> -->
-        <div v-if="this.$store.getters.getEventRegistered">
+        <div v-if="this.getEventRegistered">
             <div class="task-list">
                 <div class="list-display">
                     <h5>Horário</h5>
@@ -58,9 +58,9 @@ export default {
     data() {
         return {
             hasEventRegistered: false,
-            eventRegistered: false,
+            eventRegistered: [],
             calendarOptions: {
-                events: [],
+                events: this.$store.getters.getEvents,
                 locale: ptLocale,
                 selectable:false,
                 unselectAuto: true,
@@ -81,18 +81,16 @@ export default {
         }
     },
     mounted(){
+        // console.warn(`%cA largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`, 'color: white; font-weight:700; font-size:18px;')
+        // console.warn(`%cCaso queira, reajuste a dimensão de exibição e pressione F5 para recarregar a página.`, 'color: white; font-weight:700; font-size:16px;') 
         if (window.innerWidth > 767){
-            console.warn(`%cA largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`, 'color: white; font-weight:700; font-size:18px;')
-            console.warn(`%cCaso queira, reajuste a dimensão de exibição e pressione F5 para recarregar a página.`, 'color: white; font-weight:700; font-size:16px;') 
             return this.calendarOptions.height = 500
         }
-        console.warn(`%cA largura da sua tela ao final do ciclo Mounted é ${window.innerWidth} pixels.`, 'color: white; font-weight:700; font-size:18px;')
-        console.warn(`%cCaso queira, reajuste a dimensão de exibição e pressione F5 para recarregar a página.`, 'color: white; font-weight:700; font-size:16px;')   
         return this.calendarOptions.height = 350
     },
     computed:{
         getEventRegistered: function(){
-            return this.$store.getters.getRegisteredEvent
+            return this.$store.getters.getEventRegistered
         },
         getRegisteredEvent: function(){
             let sortByHour = this.eventRegistered
@@ -107,26 +105,19 @@ export default {
             })
             return sortByHour
         },
-        getEvents: function () {
-            return this.$store.getters.getEvents
-        }
     },
     watch:{
-        "getEvents": function() {
-            this.calendarOptions.events = this.getEvents
-        },
         searchTask: {
-            handler: async function(criteria){
+            handler: function(criteria){
                 if(criteria){
-                    let searchTitle = await this.calendarOptions.events.filter(task => task.title.toLowerCase().includes(criteria.title))
-                    let getSearchTitleStatus = await searchTitle.filter(search => search.status == criteria.status)
-                    let getDate = await getSearchTitleStatus.find(date => date.start >= criteria.initialDate && date.start <= criteria.finalDate)
+                    let searchTitle =  this.calendarOptions.events.filter(task => task.title.toLowerCase().includes(criteria.title))
+                    let getSearchTitleStatus = searchTitle.filter(search => search.status == criteria.status)
+                    let getDate = getSearchTitleStatus.find(date => date.start >= criteria.initialDate && date.start <= criteria.finalDate)
                     if (!getDate){
                         return alert('Não foi possível encontrar tarefa com os dados informados.')
                     }
                     let calendarApi = this.$refs.fullCalendar.getApi()
                     calendarApi.gotoDate(getDate.start)
-                    calendarApi.select(getDate.start)
                 }
                 return
             }
@@ -144,7 +135,7 @@ export default {
             })
         },
         dateClick (arg) {
-            let checkExists = this.$store.state.events.filter(x => x.start === arg.dateStr)
+            let checkExists = this.$store.getters.getEvents.filter(x => x.start === arg.dateStr)
             let getDay = arg.dateStr
             let splitDay = getDay.split('-')
             let dd = splitDay[2]
@@ -164,6 +155,11 @@ export default {
             this.$store.commit('editEvent', tarefa)
         }
     },
+    props:{
+        searchTask:{
+            type: Object
+        }
+    }
 }
 </script>
 <style>

@@ -24,6 +24,13 @@ export default new Vuex.Store({
             state.panelStatus.addEventForm = false
             state.panelStatus.editEventForm = false
         },
+        calendarClickedDate(state, payload){
+            state.eventToEdit = {payload}
+            state.panelStatus.inputDateStringField = payload
+            state.panelStatus.addTarefaPanel =  true
+            state.panelStatus.addEventForm = true
+            state.panelStatus.editEventForm = false
+        },
         changeEventRegistered(state, payload){
             state.hasEventRegistered = payload
         },
@@ -54,13 +61,7 @@ export default new Vuex.Store({
             state.events[taskIndex].color = '#f45858'
             state.events[taskIndex].status = 'Não Concluído'
         },
-        calendarClickedDate(state, payload){
-            state.eventToEdit = {payload}
-            state.panelStatus.inputDateStringField = payload
-            state.panelStatus.addTarefaPanel =  true
-            state.panelStatus.addEventForm = true
-            state.panelStatus.editEventForm = false
-        },
+    
         cancel(state){
             state.panelStatus.addTarefaPanel = false
             state.panelStatus.addEventForm = false
