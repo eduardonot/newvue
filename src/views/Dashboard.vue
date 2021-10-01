@@ -1,7 +1,7 @@
 <template>
     <div class="dashboard-container">
         <div class="header-title">
-            <button ><span class="material-icons">list</span></button>
+            <button @click="openUserPanel" ><span class="material-icons">list</span></button>
             <div class="panel-logo">
                 <img src="./../../public/icons/stanley-icon.png"/>
             </div>
@@ -13,7 +13,7 @@
             <div class="s6 center-panel">
                 <Calendar/>
         </div>
-        <div v-if="this.getTaskPanelStatus" ref="right-panel" class="s2 right-side-panel">
+        <div v-if="getTaskPanelStatus" ref="right-panel" class="s2 right-side-panel">
             <TaskPanel />
         </div>
     </div>
@@ -29,7 +29,8 @@ export default {
         return {
             getTaskPanelStatus:false,
             getUserPanelStatus:false,
-            transparentBackground: false
+            transparentBackground: false,
+            userPanel: false,
         }
     },
     mounted(){
@@ -53,7 +54,17 @@ export default {
         searchTask: async function (criteria){
             this.fieldsToSearch = await criteria
         },
+        openUserPanel: function(){
+            if(this.$refs['left-panel'].style.display != 'flex'){
+                this.$refs['left-panel'].style.display = 'flex'
+                this.transparentBackground = true
+            }
+        },
         cancel: function(){
+            if(this.$refs['left-panel'].style.display == 'flex'){
+                this.$refs['left-panel'].style.display = 'none'
+                this.transparentBackground = false
+            }
             this.$store.commit('cancel')
         }
     },
