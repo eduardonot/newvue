@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         events:[],
+        todayEvents: [],
         eventToEdit: {},
         hasEventRegistered: false,
         panelStatus:{
@@ -61,7 +62,9 @@ export default new Vuex.Store({
             state.events[taskIndex].color = '#f45858'
             state.events[taskIndex].status = 'Não Concluído'
         },
-    
+        setTodayEvent(state, payload){
+            state.todayEvents = payload
+        },
         cancel(state){
             state.panelStatus.addTarefaPanel = false
             state.panelStatus.addEventForm = false
@@ -85,6 +88,9 @@ export default new Vuex.Store({
         },
         getEventRegistered(state){
             return state.hasEventRegistered
+        },
+        getTodayEvents(state){
+            return state.todayEvents
         }
     },
     modules: {}

@@ -9,7 +9,7 @@
                 <div class="list-display">
                     <h5>Horário</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getRegisteredEvent" :key="tarefas.id" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getTodayEvents" :key="tarefas.id" >
                         {{ tarefas.hora }}
                     </li>
                     </ul>
@@ -17,7 +17,7 @@
                 <div class="list-display">
                     <h5>Título</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getRegisteredEvent" :key="tarefas.id" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getTodayEvents" :key="tarefas.id" >
                         {{ tarefas.title}}
                     </li>
                     </ul>
@@ -25,7 +25,7 @@
                 <div class="list-display">
                     <h5>Status</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getRegisteredEvent" :key="tarefas.id" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getTodayEvents" :key="tarefas.id" >
                         {{ tarefas.status}}
                     </li>
                     </ul>
@@ -33,7 +33,7 @@
                 <div class="list-display">
                     <h5>Descrição</h5>
                     <ul>
-                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getRegisteredEvent" :key="tarefas.id" >
+                    <li @click="() => {editSelectedTask(tarefas)}" class="event-list-display" v-for="tarefas in this.getTodayEvents" :key="tarefas.id" >
                         {{ tarefas.descricao}}
                     </li>
                     </ul>
@@ -92,9 +92,9 @@ export default {
         getEventRegistered: function(){
             return this.$store.getters.getEventRegistered
         },
-        getRegisteredEvent: function(){
-            let sortByHour = this.eventRegistered
-            sortByHour.sort(function (a, b){
+        getTodayEvents:function(){
+            let sorting = this.$store.getters.getTodayEvents
+            sorting.sort(function (a, b){
                 if (a.hora > b.hora){
                     return 1
                 }
@@ -103,7 +103,7 @@ export default {
                 }
                 return 0
             })
-            return sortByHour
+            return sorting
         },
     },
     watch:{
@@ -147,8 +147,8 @@ export default {
                 this.$store.commit('changeEventRegistered', false)
                 return
             } else {
+                this.$store.commit('setTodayEvent', checkExists)
                 this.$store.commit('changeEventRegistered', true)
-                this.eventRegistered = checkExists
             }
         },
         editSelectedTask: function(tarefa){
